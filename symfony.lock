@@ -99,6 +99,9 @@
     "fig/link-util": {
         "version": "1.0.0"
     },
+    "flosch/stripe-bundle": {
+        "version": "2.1.0"
+    },
     "friendsofsymfony/rest-bundle": {
         "version": "2.2",
         "recipe": {
@@ -173,6 +176,9 @@
         "files": [
             "./config/packages/sensio_framework_extra.yaml"
         ]
+    },
+    "stripe/stripe-php": {
+        "version": "v3.23.0"
     },
     "swiftmailer/swiftmailer": {
         "version": "v6.2.1"

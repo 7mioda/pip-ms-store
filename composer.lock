@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d61c4879bc7839df8e352b9f0790fcc8",
+    "content-hash": "b12a0b41879f75cb065304b9ad809cb9",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1317,6 +1317,54 @@
             "time": "2016-10-17T18:31:11+00:00"
         },
         {
+            "name": "flosch/stripe-bundle",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/flo-sch/stripe-bundle.git",
+                "reference": "20f777d861f890604b38b04fb135cc864cc0c9c1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/flo-sch/stripe-bundle/zipball/20f777d861f890604b38b04fb135cc864cc0c9c1",
+                "reference": "20f777d861f890604b38b04fb135cc864cc0c9c1",
+                "shasum": ""
+            },
+            "require": {
+                "ocramius/proxy-manager": "~1.0.2 || ^2.0",
+                "stripe/stripe-php": "~3.23",
+                "symfony/framework-bundle": "~3.0 || ~4.0"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "Flosch\\Bundle\\StripeBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Florent Schildknecht",
+                    "email": "florent.schildknecht@gmail.com",
+                    "homepage": "http://floschild.me"
+                }
+            ],
+            "description": "Symfony 3 bundle to easily integrate Stripe's webpayment SDK into a Symfony project.",
+            "homepage": "https://github.com/flo-sch/stripe-bundle.git",
+            "keywords": [
+                "bundle",
+                "payment",
+                "php",
+                "stripe",
+                "symfony",
+                "webpayment"
+            ],
+            "time": "2018-10-14T21:08:46+00:00"
+        },
+        {
             "name": "friendsofsymfony/rest-bundle",
             "version": "2.5.0",
             "source": {
@@ -2296,6 +2344,61 @@
                 "controllers"
             ],
             "time": "2019-04-10T06:00:20+00:00"
+        },
+        {
+            "name": "stripe/stripe-php",
+            "version": "v3.23.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stripe/stripe-php.git",
+                "reference": "c702a2ed92f4b39603c4a796492d87bcc16c819c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/c702a2ed92f4b39603c4a796492d87bcc16c819c",
+                "reference": "c702a2ed92f4b39603c4a796492d87bcc16c819c",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0",
+                "satooshi/php-coveralls": "~0.6.1",
+                "squizlabs/php_codesniffer": "~2.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Stripe\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Stripe and contributors",
+                    "homepage": "https://github.com/stripe/stripe-php/contributors"
+                }
+            ],
+            "description": "Stripe PHP Library",
+            "homepage": "https://stripe.com/",
+            "keywords": [
+                "api",
+                "payment processing",
+                "stripe"
+            ],
+            "time": "2016-09-15T18:16:59+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",

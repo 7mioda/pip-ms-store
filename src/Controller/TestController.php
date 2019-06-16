@@ -12,6 +12,7 @@ class TestController extends FOSRestController {
 */
 public function testAction(): View
 {
-return View::create(['test' => 'OK']);
+$stripeClient = $this->get('flosch.stripe.client');
+return View::create(['test' => 'OK', 'stripe' => $stripeClient]);
 }
 }
