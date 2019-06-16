@@ -234,11 +234,11 @@ class User
      */
     public function setOrder($order): void
     {
-        $this->user = $order;
+        $this->order = $order;
     }
 
 
     public function __construct() {
-        $this->user = new ArrayCollection();
+        $this->order = new ArrayCollection();
     }
 }
