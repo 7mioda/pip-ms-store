@@ -7,6 +7,7 @@ use App\Repository\UserRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,7 +20,7 @@ class UserController extends AbstractFOSRestController
      * @param UserRepository $userRepository
      * @return View
      */
-    public function index(UserRepository $userRepository): View
+    public function index(UserRepository $userRepository)
     {
         return View::create(['users' => $userRepository->findAll()]);
     }
@@ -29,22 +30,22 @@ class UserController extends AbstractFOSRestController
      * @param Request $request
      * @return View
      */
-    public function new(Request $request): View
+    public function new(Request $request)
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->submit($request->request->all());
         if(!$form->isValid()){
-            return View::create(['test' => 'Ko', 'errors' => $form->getErrors()]);
+            View::create(['test' => $form]);
         }
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($user);
         $entityManager->flush();
-        return View::create(['test' => 'OK']);
+        return View::create(['status' => 'OK', 'user' => $user]);
     }
 
     /**
-     * @Rest\Get("/{id}", name="user_show")
+     * @Rest\Get("/users/{id}", name="user_show")
      * @param User $user
      * @return View
      */

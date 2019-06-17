@@ -156,7 +156,7 @@ class User
         return $this->status;
     }
 
-    public function setStatus(?string $status): self
+    public function setStatus(?string $status): User
     {
         $this->status = $status;
 
@@ -168,7 +168,7 @@ class User
         return $this->cardNumber;
     }
 
-    public function setCardNumber(?int $cardNumber): self
+    public function setCardNumber(?int $cardNumber): User
     {
         $this->cardNumber = $cardNumber;
 
@@ -189,10 +189,12 @@ class User
 
     /**
      * @param mixed $products
+     * @return User
      */
-    public function setProducts($products): void
+    public function setProducts($products): User
     {
         $this->products = $products;
+        return $this;
     }
     /**
      * One User has One Profile.
@@ -210,10 +212,12 @@ class User
 
     /**
      * @param mixed $profile
+     * @return User
      */
-    public function setProfile($profile): void
+    public function setProfile($profile): User
     {
         $this->profile = $profile;
+        return $this;
     }
 
     /**
@@ -232,9 +236,11 @@ class User
 
     /**
      * @param mixed $order
+     * @return User
      */
-    public function setOrder($order): void
+    public function setOrder($order): User
     {
         $this->order = $order;
+        return $this;
     }
 }
