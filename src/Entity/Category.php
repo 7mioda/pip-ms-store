@@ -60,19 +60,24 @@ class Category
      */
     private $products;
 
-    /**
-     * @return mixed
-     */
-    public function getProducts()
+    public function getProducts(): Collection
     {
         return $this->products;
     }
-
-    /**
-     * @param mixed $products
-     */
-    public function setProducts($products): void
+    public function addProduct(Product $product): self
     {
-        $this->products = $products;
+        if (!$this->products->contains($product)) {
+            $this->products[] = $product;
+            $product->addFlashSale($this);
+        }
+        return $this;
+    }
+    public function removeProduct(Product $product): self
+    {
+        if ($this->articles->contains($product)) {
+            $this->articles->removeElement($product);
+            $product->removeFlashSale($this);
+        }
+        return $this;
     }
 }

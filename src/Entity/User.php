@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -27,12 +28,12 @@ class User
     private $lastName;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $cin;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $phoneNumber;
 
@@ -42,14 +43,14 @@ class User
     private $email;
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=255)
      */
     private $role;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="text")
      */
-    private $adress;
+    private $address;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -57,7 +58,7 @@ class User
     private $status;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="string", length=255 ,nullable=true)
      */
     private $cardNumber;
 
@@ -138,14 +139,14 @@ class User
         return $this;
     }
 
-    public function getAdress(): ?string
+    public function getAddress(): ?string
     {
-        return $this->adress;
+        return $this->address;
     }
 
-    public function setAdress(?string $adress): self
+    public function setAddress(?string $address): self
     {
-        $this->adress = $adress;
+        $this->address = $address;
 
         return $this;
     }
@@ -234,11 +235,6 @@ class User
      */
     public function setOrder($order): void
     {
-        $this->user = $order;
-    }
-
-
-    public function __construct() {
-        $this->user = new ArrayCollection();
+        $this->order = $order;
     }
 }
