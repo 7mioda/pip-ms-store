@@ -18,7 +18,7 @@ class UserType extends AbstractType
             ->add('phoneNumber')
             ->add('email')
             ->add('role')
-            ->add('adress')
+            ->add('address')
             ->add('status')
             ->add('cardNumber')
             ->add('profile')
@@ -29,8 +29,6 @@ class UserType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
-            'csrf_protection' => false,
-            'validation_groups' => false,
         ]);
     }
 }
