@@ -176,73 +176,27 @@ class User
 
         return $this;
     }
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="seller", orphanRemoval=true)
-     */
-    private $products;
-
-    /**
-     * @return mixed
-     */
-    public function getProducts()
-    {
-        return $this->products;
-    }
-
-    /**
-     * @param mixed $products
-     * @return User
-     */
-    public function setProducts($products): User
-    {
-        $this->products = $products;
-        return $this;
-    }
-    /**
-     * One User has One Profile.
-     * @ORM\OneToOne(targetEntity="App\Entity\Profile", mappedBy="user")
-     */
-    private $profile;
-
-    /**
-     * @return mixed
-     */
-    public function getProfile()
-    {
-        return $this->profile;
-    }
-
-    /**
-     * @param mixed $profile
-     * @return User
-     */
-    public function setProfile($profile): User
-    {
-        $this->profile = $profile;
-        return $this;
-    }
-
-    /**
-     * One user has many orders. This is the inverse side.
-     * @ORM\OneToMany(targetEntity="App\Entity\Order", mappedBy="user")
-     */
-    private $order;
-
-    /**
-     * @return mixed
-     */
-    public function getOrder()
-    {
-        return $this->order;
-    }
-
-    /**
-     * @param mixed $order
-     * @return User
-     */
-    public function setOrder($order): User
-    {
-        $this->order = $order;
-        return $this;
-    }
+//    /**
+//     * One order has many orderLines. This is the inverse side.
+//     * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="user")
+//     */
+//    private $products;
+//
+//    /**
+//     * @return mixed
+//     */
+//    public function getProducts()
+//    {
+//        return $this->products;
+//    }
+//
+//    /**
+//     * @param mixed $products
+//     * @return User
+//     */
+//    public function setProducts($products): User
+//    {
+//        $this->products = $products;
+//        return $this;
+//    }
 }

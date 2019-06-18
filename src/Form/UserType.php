@@ -21,7 +21,6 @@ class UserType extends AbstractType
             ->add('address')
             ->add('status')
             ->add('cardNumber')
-            ->add('profile')
         ;
     }
 

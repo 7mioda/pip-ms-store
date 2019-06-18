@@ -25,7 +25,9 @@ class UserController extends AbstractFOSRestController
     public function index(UserRepository $userRepository)
     {
         $users = $userRepository->findAll();
-        var_dump($users);
+        if (!$users) {
+            throw $this->createNotFoundException("Data not found.");
+        }
         return View::create($users, Response::HTTP_OK, []);
     }
 
@@ -58,6 +60,9 @@ class UserController extends AbstractFOSRestController
      */
     public function show(User $user): View
     {
+        if (!$user) {
+            throw $this->createNotFoundException("Data not found.");
+        }
         return View::create($user, Response::HTTP_OK, []);
     }
 
@@ -69,6 +74,9 @@ class UserController extends AbstractFOSRestController
      */
     public function edit(Request $request, User $user)
     {
+        if (!$user) {
+            throw $this->createNotFoundException("Data not found.");
+        }
         $form = $this->createForm(UserType::class, $user);
         $form->submit($request->request->all());
         if (!$form->isValid()) {
@@ -88,6 +96,9 @@ class UserController extends AbstractFOSRestController
      */
     public function delete(User $user): View
     {
+        if (!$user) {
+            throw $this->createNotFoundException('Data not found.');
+        }
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->remove($user);
         $entityManager->flush();

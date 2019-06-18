@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class CategoryController extends AbstractFOSRestController
 {
     /**
-     * @Rest\Get("/categoreis", name="category_index")
+     * @Rest\Get("/categories", name="category_index")
      * @param CategoryRepository $categoryRepository
      * @return View
      * @Rest\View()
@@ -26,6 +26,9 @@ class CategoryController extends AbstractFOSRestController
     public function index(CategoryRepository $categoryRepository): View
     {
         $categories = $categoryRepository->findAll();
+        if (!$categories) {
+            throw $this->createNotFoundException("Data not found.");
+        }
         return View::create($categories, Response::HTTP_OK, []);
     }
 
@@ -57,6 +60,9 @@ class CategoryController extends AbstractFOSRestController
      */
     public function show(Category $category): View
     {
+        if (!$category) {
+            throw $this->createNotFoundException("Data not found.");
+        }
         return View::create($category, Response::HTTP_OK, []);
     }
 
@@ -68,6 +74,9 @@ class CategoryController extends AbstractFOSRestController
      */
     public function edit(Request $request, Category $category)
     {
+        if (!$category) {
+            throw $this->createNotFoundException("Data not found.");
+        }
         $form = $this->createForm(CategoryType::class, $category);
         $form->handleRequest($request);
         $form->submit($request->request->all());
@@ -88,6 +97,9 @@ class CategoryController extends AbstractFOSRestController
      */
     public function delete(Category $category): View
     {
+        if (!$category) {
+            throw $this->createNotFoundException("Data not found.");
+        }
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->remove($category);
         $entityManager->flush();
