@@ -5,9 +5,11 @@ namespace App\Controller;
 use App\Entity\Category;
 use App\Form\CategoryType;
 use App\Repository\CategoryRepository;
+use App\Repository\UserRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,19 +18,22 @@ use Symfony\Component\Routing\Annotation\Route;
 class CategoryController extends AbstractFOSRestController
 {
     /**
-     * @Route("/", name="category_index", methods={"GET"})
+     * @Rest\Get("/categoreis", name="category_index")
+     * @param CategoryRepository $categoryRepository
+     * @return View
+     * @Rest\View()
      */
-    public function index(CategoryRepository $categoryRepository): Response
+    public function index(CategoryRepository $categoryRepository): View
     {
-        return $this->render('category/index.html.twig', [
-            'categories' => $categoryRepository->findAll(),
-        ]);
+        $categories = $categoryRepository->findAll();
+        return View::create($categories, Response::HTTP_OK, []);
     }
 
     /**
-     * @Rest\Post("/category/new", name="category_new")
+     * @Rest\Post("/categories/new", name="category_new")
      * @param Request $request
-     * @return View
+     * @return View|FormInterface
+     * @Rest\View()
      */
     public function new(Request $request): View
     {
@@ -36,58 +41,56 @@ class CategoryController extends AbstractFOSRestController
         $form = $this->createForm(CategoryType::class, $category);
         $form->submit($request->request->all());
         if(!$form->isValid()){
-            return View::create(['test' => 'Ko', 'errors' => $form->getErrors()]);
+            return $form;
         }
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($category);
         $entityManager->flush();
-        return View::create(['test' => 'OK']);
+        return View::create($category, Response::HTTP_CREATED,[]);
     }
 
 
     /**
-     * @Route("/{id}", name="category_show", methods={"GET"})
+     * @Rest\Get("/categories/{id}", name="category_show")
+     * @param Category $category
+     * @return View
      */
-    public function show(Category $category): Response
+    public function show(Category $category): View
     {
-        return $this->render('category/show.html.twig', [
-            'category' => $category,
-        ]);
+        return View::create($category, Response::HTTP_OK, []);
     }
 
     /**
-     * @Route("/{id}/edit", name="category_edit", methods={"GET","POST"})
+     * @Rest\Post("categories/edit/{id}", name="category_edit")
+     * @param Request $request
+     * @param Category $category
+     * @return View|FormInterface
      */
-    public function edit(Request $request, Category $category): Response
+    public function edit(Request $request, Category $category)
     {
         $form = $this->createForm(CategoryType::class, $category);
         $form->handleRequest($request);
+        $form->submit($request->request->all());
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('category_index', [
-                'id' => $category->getId(),
-            ]);
+        if (!$form->isValid()) {
+            return $form;
         }
-
-        return $this->render('category/edit.html.twig', [
-            'category' => $category,
-            'form' => $form->createView(),
-        ]);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($category);
+        $entityManager->flush();
+        return View::create($category, Response::HTTP_OK, []);
     }
 
     /**
-     * @Route("/{id}", name="category_delete", methods={"DELETE"})
+     * @Rest\Delete("/categories/delete/{id}", name="category_delete")
+     * @param Category $category
+     * @return View
      */
-    public function delete(Request $request, Category $category): Response
+    public function delete(Category $category): View
     {
-        if ($this->isCsrfTokenValid('delete'.$category->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($category);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('category_index');
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($category);
+        $entityManager->flush();
+        return View::create(null,Response::HTTP_OK);
     }
 }

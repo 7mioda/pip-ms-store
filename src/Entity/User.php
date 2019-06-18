@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -39,6 +39,8 @@ class User
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Email
+     * @Assert\NotBlank
      */
     private $email;
 
@@ -91,24 +93,24 @@ class User
         return $this;
     }
 
-    public function getCin(): ?int
+    public function getCin(): ?string
     {
         return $this->cin;
     }
 
-    public function setCin(?int $cin): self
+    public function setCin(?string $cin): self
     {
         $this->cin = $cin;
 
         return $this;
     }
 
-    public function getPhoneNumber(): ?int
+    public function getPhoneNumber(): ?string
     {
         return $this->phoneNumber;
     }
 
-    public function setPhoneNumber(?int $phoneNumber): self
+    public function setPhoneNumber(?string $phoneNumber): self
     {
         $this->phoneNumber = $phoneNumber;
 
