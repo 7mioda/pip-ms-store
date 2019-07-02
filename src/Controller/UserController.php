@@ -12,6 +12,8 @@ use FOS\RestBundle\View\View;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 
 
 class UserController extends AbstractFOSRestController
@@ -34,10 +36,12 @@ class UserController extends AbstractFOSRestController
     /**
      * @Rest\Post("/users/new", name="user_new")
      * @param Request $request
+     * @param UserPasswordEncoderInterface $encoder
+     * @param JWTTokenManagerInterface $JWTManager
      * @return View|FormInterface
      * @Rest\View()
      */
-    public function new(Request $request)
+    public function inscription(Request $request, UserPasswordEncoderInterface $encoder, JWTTokenManagerInterface $JWTManager)
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -46,10 +50,12 @@ class UserController extends AbstractFOSRestController
         if (!$form->isValid()) {
             return $form;
         }
+        $encoded = $encoder->encodePassword($user, $user->getPassword());
+        $user->setPassword($encoded);
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($user);
         $entityManager->flush();
-        return View::create($user, Response::HTTP_CREATED, []);
+        return View::create(null, Response::HTTP_CREATED, ['token' => $JWTManager->create($user)]);
     }
 
     /**

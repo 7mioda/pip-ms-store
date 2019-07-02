@@ -3,12 +3,16 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Serializable;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * UniqueEntity("email")
  */
-class User
+class User implements UserInterface, Serializable
 {
     /**
      * @ORM\Id()
@@ -18,16 +22,19 @@ class User
     private $id;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $firstName;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $lastName;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $cin;
@@ -39,15 +46,24 @@ class User
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Email
+     * @Assert\Email(
+     *     message = "The email '{{ value }}' is not a valid email.",
+     *     checkMX = true
+     * )
      * @Assert\NotBlank
      */
     private $email;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(type="string", length=255)
      */
-    private $role;
+    private $password;
+
+    /**
+     * @ORM\Column(type="json_array")
+     */
+    private $roles = array();
 
     /**
      * @ORM\Column(type="text")
@@ -129,15 +145,32 @@ class User
         return $this;
     }
 
-    public function getRole(): ?string
+    /**
+     * @return array
+     */
+    public function getRoles()
     {
-        return $this->role;
+        $roles = $this->roles;
+        $roles[] = 'ROLE_USER';
+        return array_unique($roles);
+    }
+    /**
+     * @param array $roles
+     * @return User
+     */
+    public function setRoles(array $roles):self
+    {
+        $this->roles = $roles;
+        return $this;
     }
 
-    public function setRole(string $role): self
+    public function getPassword(): ?string
     {
-        $this->role = $role;
-
+        return $this->password;
+    }
+    public function setPassword(string $password): User
+    {
+        $this->password = $password;
         return $this;
     }
 
@@ -146,7 +179,7 @@ class User
         return $this->address;
     }
 
-    public function setAddress(?string $address): self
+    public function setAddress(?string $address): User
     {
         $this->address = $address;
 
@@ -176,27 +209,73 @@ class User
 
         return $this;
     }
-//    /**
-//     * One order has many orderLines. This is the inverse side.
-//     * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="user")
-//     */
-//    private $products;
-//
-//    /**
-//     * @return mixed
-//     */
-//    public function getProducts()
-//    {
-//        return $this->products;
-//    }
-//
-//    /**
-//     * @param mixed $products
-//     * @return User
-//     */
-//    public function setProducts($products): User
-//    {
-//        $this->products = $products;
-//        return $this;
-//    }
+    /**
+     * String representation of object
+     * @link https://php.net/manual/en/serializable.serialize.php
+     * @return string the string representation of the object or null
+     * @since 5.1.0
+     */
+    public function serialize()
+    {
+        return serialize([
+            $this->id,
+            $this->firstName,
+            $this->cin,
+            $this->email,
+            $this->password
+        ]);
+    }
+
+    /**
+     * Constructs the object
+     * @link https://php.net/manual/en/serializable.unserialize.php
+     * @param string $serialized <p>
+     * The string representation of the object.
+     * </p>
+     * @return void
+     * @since 5.1.0
+     */
+    public function unserialize($serialized)
+    {
+        list(
+            $this->id,
+            $this->firstName,
+            $this->cin,
+            $this->email,
+            $this->password
+            ) = unserialize($serialized,['allawed_classes' => false]);
+    }
+
+    /**
+     * Returns the salt that was originally used to encode the password.
+     *
+     * This can return null if the password was not encoded using a salt.
+     *
+     * @return string|null The salt
+     */
+    public function getSalt()
+    {
+        // TODO: Implement getSalt() method.
+    }
+
+    /**
+     * Returns the username used to authenticate the user.
+     *
+     * @return string The username
+     */
+    public function getUsername()
+    {
+        return $this->email;
+    }
+
+    /**
+     * Removes sensitive data from the user.
+     *
+     * This is important if, at any given point, sensitive information like
+     * the plain-text password is stored on this object.
+     */
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
 }
