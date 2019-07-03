@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -26,6 +27,19 @@ class Category
      */
     private $name;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Product", mappedBy="categories", fetch="EXTRA_LAZY")
+     */
+    private $products;
+
+    /**
+     * Constructor
+     */
+    public function __construct() {
+        $this->products = new ArrayCollection();
+    }
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -36,7 +50,7 @@ class Category
         return $this->description;
     }
 
-    public function setDescription(?string $description): self
+    public function setDescription(?string $description): Category
     {
         $this->description = $description;
 
@@ -48,31 +62,36 @@ class Category
         return $this->name;
     }
 
-    public function setName(?string $name): self
+    public function setName(?string $name): Category
     {
         $this->name = $name;
 
         return $this;
     }
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="category", orphanRemoval=true)
-     */
-    private $products;
+    public function setProducts($products): Category
+    {
+        $this->products = $products;
+        return $this;
+    }
 
-    /**
-     * @return mixed
-     */
-    public function getProducts()
+    public function getProducts(): ArrayCollection
     {
         return $this->products;
     }
 
-    /**
-     * @param mixed $products
-     */
-    public function setProducts($products): void
+    public function addProduct(Product $product): Category
     {
-        $this->products = $products;
+        if (!$this->products->contains($product)) {
+            $this->products[] = $product;
+        }
+        return $this;
+    }
+    public function removeProduct(Product $product): Category
+    {
+        if ($this->products->contains($product)) {
+            $this->products->removeElement($product);
+        }
+        return $this;
     }
 }
