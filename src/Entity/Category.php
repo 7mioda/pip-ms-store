@@ -28,7 +28,7 @@ class Category
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Product, mappedBy="categories", fetch="EXTRA_LAZY")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Product", mappedBy="categories", fetch="EXTRA_LAZY")
      */
     private $products;
 

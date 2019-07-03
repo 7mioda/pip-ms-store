@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use PhpParser\Node\Scalar\String_;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProfileRepository")
@@ -17,19 +18,22 @@ class Profile
     private $id;
 
     /**
-     * @ORM\Column(type="blob", nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $photo;
 
     /**
-     * @ORM\Column(type="time", nullable=true)
-     */
-    private $sessionExpiration;
-
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $banner;
+
+    /**
+     * One profile has One user.
+     * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="profile")
+     * @ORM\JoinColumn(name="user", referencedColumnName="id")
+     */
+    private $user;
+
 
     public function getId(): ?int
     {
@@ -41,43 +45,25 @@ class Profile
         return $this->photo;
     }
 
-    public function setPhoto($photo): self
+    public function setPhoto($photo): Profile
     {
         $this->photo = $photo;
 
         return $this;
     }
 
-    public function getSessionExpiration(): ?\DateTimeInterface
-    {
-        return $this->sessionExpiration;
-    }
 
-    public function setSessionExpiration(?\DateTimeInterface $sessionExpiration): self
-    {
-        $this->sessionExpiration = $sessionExpiration;
-
-        return $this;
-    }
-
-    public function getBanner(): ?bool
+    public function getBanner(): ?String
     {
         return $this->banner;
     }
 
-    public function setBanner(?bool $banner): self
+    public function setBanner(?bool $banner): Profile
     {
         $this->banner = $banner;
 
         return $this;
     }
-
-    /**
-     * One profile has One user.
-     * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="profile")
-     * @ORM\JoinColumn(name="user", referencedColumnName="id")
-     */
-    private $user;
 
     /**
      * @return mixed
