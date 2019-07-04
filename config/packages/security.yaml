@@ -6,11 +6,11 @@ security:
         in_memory: { memory: ~ }
     firewalls:
         login:
-            pattern:  ^/api/login
+            pattern:  ^/api/users/login
             stateless: true
             anonymous: true
             json_login:
-                check_path:               /api/login_check
+                check_path:               /api/users/login
                 success_handler:          lexik_jwt_authentication.handler.authentication_success
                 failure_handler:          lexik_jwt_authentication.handler.authentication_failure
         subscription:

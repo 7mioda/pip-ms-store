@@ -51,11 +51,23 @@ class UserController extends AbstractFOSRestController
             return $form;
         }
         $encoded = $encoder->encodePassword($user, $user->getPassword());
-        $user->setPassword($encoded);
+        $user->setPassword($user->getPassword());
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($user);
         $entityManager->flush();
         return View::create(null, Response::HTTP_CREATED, ['token' => $JWTManager->create($user)]);
+    }
+
+    /**
+     * @Rest\Post("/users/login", name="login")
+     * @param Request $request
+     * @param JWTTokenManagerInterface $JWTManager
+     * @return View|FormInterface
+     * @Rest\View()
+     */
+    public function login(Request $request, JWTTokenManagerInterface $JWTManager)
+    {
+        return View::create(null, Response::HTTP_CREATED, ['token' => 'ddddd']);
     }
 
     /**
