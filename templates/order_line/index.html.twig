@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<title>OrderLine index</title>
+
+{% block body %}
+    <h1>OrderLine index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for order_line in order_lines %}
+            <tr>
+                <td>{{ order_line.id }}</td>
+                <td>{{ order_line.quantity }}</td>
+                <td>{{ order_line.price }}</td>
+                <td>{{ order_line.description }}</td>
+                <td>
+                    <a href="{{ path('order_line_show', {'id': order_line.id}) }}">show</a>
+                    <a href="{{ path('order_line_edit', {'id': order_line.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('order_line_new') }}">Create new</a>
+{% endblock %}

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+
+<title>Edit OrderLine</title>
+
+{% block body %}
+    <h1>Edit OrderLine</h1>
+
+    {{ include('order_line/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('order_line_index') }}">back to list</a>
+
+    {{ include('order_line/_delete_form.html.twig') }}
+{% endblock %}

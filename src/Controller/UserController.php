@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Profile;
+
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
