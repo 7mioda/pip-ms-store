@@ -22,14 +22,11 @@ class Delivery
     private $status;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * One Delivery has One Order.
+     * @ORM\OneToOne(targetEntity="App\Entity\Order", inversedBy="delivery")
+     * @ORM\JoinColumn(name="order", referencedColumnName="id")
      */
-    private $parcour;
-
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $timeValidUser;
+    private $order;
 
     public function getId(): ?int
     {
@@ -41,42 +38,12 @@ class Delivery
         return $this->status;
     }
 
-    public function setStatus(?string $status): self
+    public function setStatus(?string $status): Delivery
     {
         $this->status = $status;
 
         return $this;
     }
-
-    public function getParcour(): ?string
-    {
-        return $this->parcour;
-    }
-
-    public function setParcour(?string $parcour): self
-    {
-        $this->parcour = $parcour;
-
-        return $this;
-    }
-
-    public function getTimeValidUser(): ?\DateTimeInterface
-    {
-        return $this->timeValidUser;
-    }
-
-    public function setTimeValidUser(?\DateTimeInterface $timeValidUser): self
-    {
-        $this->timeValidUser = $timeValidUser;
-
-        return $this;
-    }
-    /**
-     * One Delivery has One Order.
-     * @ORM\OneToOne(targetEntity="App\Entity\Order", inversedBy="delivery")
-     * @ORM\JoinColumn(name="order", referencedColumnName="id")
-     */
-    private $order;
 
     /**
      * @return mixed

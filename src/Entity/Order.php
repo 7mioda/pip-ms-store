@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -17,45 +19,86 @@ class Order
     private $id;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(name="created_at",type="datetime")
      */
-    private $creationDate;
+    private $createdAt;
+
+    /**
+     * @ORM\Column(name="validated_at", type="datetime", nullable=true)
+     */
+    private $validatedAt;
 
     /**
      * @ORM\Column(type="float", nullable=true)
      */
-    private $price;
+    private $totalPrice;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $note;
 
+
+    /**
+     * @ORM\OneToMany(targetEntity="OrderLine", mappedBy="order", cascade={"remove"})
+     */
+    private $orderLines;
+
+    /**
+     * Many Orders have one user. This is the owning side.
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
+
+    /**
+     * One Order has One Delivery.
+     * @ORM\OneToOne(targetEntity="App\Entity\Delivery", mappedBy="order")
+     */
+    private $delivery;
+
+
+    public function __construct() {
+        $this->orderLines = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getCreationDate(): ?\DateTimeInterface
+    public function getCreatedAt(): DateTimeInterface
     {
-        return $this->creationDate;
+        return $this->createdAt;
     }
 
-    public function setCreationDate(\DateTimeInterface $creationDate): self
+    public function setCreatedAt(DateTimeInterface $createdAt): Order
     {
-        $this->creationDate = $creationDate;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getPrice(): ?float
+    public function setValidatedAt($validatedAt)
     {
-        return $this->price;
+        $this->validatedAt = $validatedAt;
+
+        return $this;
     }
 
-    public function setPrice(?float $price): self
+    public function getValidatedAt()
     {
-        $this->price = $price;
+        return $this->validatedAt;
+    }
+
+    public function getTotalPrice(): ?float
+    {
+        return $this->totalPrice;
+    }
+
+    public function setTotalPrice(?float $totalPrice): Order
+    {
+        $this->$totalPrice = $totalPrice;
 
         return $this;
     }
@@ -71,12 +114,6 @@ class Order
 
         return $this;
     }
-    /**
-     * Many Orders have one user. This is the owning side.
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="order")
-     * @ORM\JoinColumn(name="user", referencedColumnName="id")
-     */
-    private $user;
 
     /**
      * @return mixed
@@ -93,11 +130,6 @@ class Order
     {
         $this->user = $user;
     }
-    /**
-     * One order has many orderLines. This is the inverse side.
-     * @ORM\OneToMany(targetEntity="App\Entity\OrderLine", mappedBy="order")
-     */
-    private $orderLines;
 
     /**
      * @return mixed
@@ -109,16 +141,35 @@ class Order
 
     /**
      * @param mixed $orderLines
+     * @return Order
      */
-    public function setOrderLines($orderLines): void
+    public function setOrderLines($orderLines): Order
     {
         $this->orderLines = $orderLines;
+
+        return $this;
     }
+
     /**
-     * One Order has One Delivery.
-     * @ORM\OneToOne(targetEntity="App\Entity\Delivery", mappedBy="order")
+     * @param OrderLine $orderLine
+     * @return $this
      */
-    private $delivery;
+    public function addOrderLine(OrderLine $orderLine): Order
+    {
+        if (!$this->orderLines->contains($orderLine)) {
+            $this->orderLines[] = $orderLine;
+        }
+        return $this;
+    }
+
+    public function removeOrderLine(OrderLine $orderLine)
+    {
+        if (!$this->orderLines->contains($orderLine)) {
+            $this->orderLines->removeElement($orderLine);
+        }
+        return $this;
+    }
+
 
     /**
      * @return mixed

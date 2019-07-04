@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -9,10 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class FlashSale
 {
-    public function __construct()
-    {
-        $this->products = new ArrayCollection();
-    }
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -23,7 +21,7 @@ class FlashSale
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $BeginDate;
+    private $beginDate;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -35,29 +33,41 @@ class FlashSale
      */
     private $price;
 
+    /**
+     * Many flashSales have Many products.
+     * @ORM\ManyToMany(targetEntity="App\Entity\Product", inversedBy="flashSales")
+     * @ORM\JoinTable(name="products")
+     */
+    private $products;
+
+    public function __construct()
+    {
+        $this->products = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getBeginDate(): ?\DateTimeInterface
+    public function getBeginDate(): ?DateTimeInterface
     {
-        return $this->BeginDate;
+        return $this->beginDate;
     }
 
-    public function setBeginDate(?\DateTimeInterface $BeginDate): self
+    public function setBeginDate(?DateTimeInterface $beginDate): FlashSale
     {
-        $this->BeginDate = $BeginDate;
+        $this->beginDate = $beginDate;
 
         return $this;
     }
 
-    public function getEndDate(): ?\DateTimeInterface
+    public function getEndDate(): ?DateTimeInterface
     {
         return $this->endDate;
     }
 
-    public function setEndDate(?\DateTimeInterface $endDate): self
+    public function setEndDate(?DateTimeInterface $endDate): FlashSale
     {
         $this->endDate = $endDate;
 
@@ -75,18 +85,13 @@ class FlashSale
 
         return $this;
     }
-    /**
-     * Many flashSales have Many products.
-     * @ORM\ManyToMany(targetEntity="App\Entity\Product", inversedBy="flashSales")
-     * @ORM\JoinTable(name="products")
-     */
-    private $products;
 
-    public function getProducts(): Collection
+    public function getProducts(): ArrayCollection
     {
         return $this->products;
     }
-    public function addProduct(Product $product): self
+
+    public function addProduct(Product $product): FlashSale
     {
         if (!$this->products->contains($product)) {
             $this->products[] = $product;
@@ -94,10 +99,10 @@ class FlashSale
         }
         return $this;
     }
-    public function removeProduct(Product $product): self
+    public function removeProduct(Product $product): FlashSale
     {
-        if ($this->articles->contains($product)) {
-            $this->articles->removeElement($product);
+        if ($this->products->contains($product)) {
+            $this->products->removeElement($product);
             $product->removeFlashSale($this);
         }
         return $this;

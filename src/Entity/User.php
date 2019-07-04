@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Serializable;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -90,7 +91,7 @@ class User implements UserInterface, Serializable
         return $this->firstName;
     }
 
-    public function setFirstName(?string $firstName): self
+    public function setFirstName(?string $firstName): User
     {
         $this->firstName = $firstName;
 
@@ -102,7 +103,7 @@ class User implements UserInterface, Serializable
         return $this->lastName;
     }
 
-    public function setLastName(?string $lastName): self
+    public function setLastName(?string $lastName): User
     {
         $this->lastName = $lastName;
 
@@ -114,7 +115,7 @@ class User implements UserInterface, Serializable
         return $this->cin;
     }
 
-    public function setCin(?string $cin): self
+    public function setCin(?string $cin): User
     {
         $this->cin = $cin;
 
@@ -126,7 +127,7 @@ class User implements UserInterface, Serializable
         return $this->phoneNumber;
     }
 
-    public function setPhoneNumber(?string $phoneNumber): self
+    public function setPhoneNumber(?string $phoneNumber): User
     {
         $this->phoneNumber = $phoneNumber;
 
@@ -138,7 +139,7 @@ class User implements UserInterface, Serializable
         return $this->email;
     }
 
-    public function setEmail(?string $email): self
+    public function setEmail(?string $email): User
     {
         $this->email = $email;
 
@@ -158,7 +159,7 @@ class User implements UserInterface, Serializable
      * @param array $roles
      * @return User
      */
-    public function setRoles(array $roles):self
+    public function setRoles(array $roles):User
     {
         $this->roles = $roles;
         return $this;
