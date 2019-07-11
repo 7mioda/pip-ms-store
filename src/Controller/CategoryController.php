@@ -35,10 +35,11 @@ class CategoryController extends AbstractFOSRestController
     /**
      * @Rest\Post("/categories/new", name="category_new")
      * @param Request $request
+     * @param Uploader $uploader
      * @return View|FormInterface
      * @Rest\View()
      */
-    public function new(Request $request): View
+    public function new(Request $request, Uploader $uploader): View
     {
         $category = new Category();
         $form = $this->createForm(CategoryType::class, $category);
@@ -46,6 +47,10 @@ class CategoryController extends AbstractFOSRestController
         if(!$form->isValid()){
             return $form;
         }
+        ### test file Uploads
+        $image = $uploader->uploadImage($request->files->get('description'), []);
+        $category->setDescription($image);
+        ### test file Uploads
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($category);
         $entityManager->flush();
