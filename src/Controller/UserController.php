@@ -12,6 +12,8 @@ use FOS\RestBundle\View\View;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mercure\Publisher;
+use Symfony\Component\Mercure\Update;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 
@@ -38,10 +40,11 @@ class UserController extends AbstractFOSRestController
      * @param Request $request
      * @param UserPasswordEncoderInterface $encoder
      * @param JWTTokenManagerInterface $JWTManager
+     * @param Publisher $publisher
      * @return View|FormInterface
      * @Rest\View()
      */
-    public function inscription(Request $request, UserPasswordEncoderInterface $encoder, JWTTokenManagerInterface $JWTManager)
+    public function inscription(Request $request, UserPasswordEncoderInterface $encoder, JWTTokenManagerInterface $JWTManager, Publisher $publisher)
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -55,6 +58,14 @@ class UserController extends AbstractFOSRestController
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($user);
         $entityManager->flush();
+        $update = new Update(
+            'http://example.com/users',
+            json_encode(['status' => 'user created'])
+        );
+
+        // The Publisher service is an invokable object
+        $publisher($update);
+
         return View::create(null, Response::HTTP_CREATED, ['token' => $JWTManager->create($user)]);
     }
 
