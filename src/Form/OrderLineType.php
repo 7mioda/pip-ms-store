@@ -14,9 +14,8 @@ class OrderLineType extends AbstractType
         $builder
             ->add('quantity')
             ->add('price')
-            ->add('description')
-            ->add('category')
             ->add('order')
+            ->add('product')
         ;
     }
 

@@ -15,14 +15,14 @@ class ProductType extends AbstractType
             ->add('name')
             ->add('description')
             ->add('image')
-            ->add('statut')
+            ->add('status')
             ->add('price')
             ->add('discountEndDate')
             ->add('discountBeginDate')
             ->add('createdAt')
             ->add('discount')
-            ->add('category')
             ->add('seller')
+            ->add('category')
             ->add('flashSales')
         ;
     }

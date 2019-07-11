@@ -81,8 +81,8 @@ class Product
     /**
      * @var int
      *
-     *@ORM\ManyToOne(targetEntity="App\Entity\Category")
-     *@ORM\JoinColumn(name="category", referencedColumnName="id" ,nullable=true )
+     *@ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="products")
+     *@ORM\JoinColumn(nullable=true )
      */
     private $category;
 
