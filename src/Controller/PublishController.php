@@ -9,13 +9,15 @@ class PublishController
 {
     public function __invoke(Publisher $publisher): Response
     {
-            $update = new Update(
-            'http://example.com/books/1',
-            json_encode(['status' => 'OutOfStock'])
-            );
-            // The Publisher service is an invokable object
-            $publisher($update);
+        $update = new Update(
+        'http://example.com/books/1',
+        json_encode(['status' => 'OutOfStock'])
+        );
 
-            return new Response('published!');
+        // The Publisher service is an invokable object
+        $publisher($update);
+
+        return new Response('published!');
+
     }
 }
