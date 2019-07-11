@@ -26,11 +26,11 @@ class Category
      */
     private $name;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="category")
-     */
-    private $products;
-
+//    /**
+//     * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="category")
+//     */
+//    private $products;
+//
 //    /**
 //     * Constructor
 //     */
