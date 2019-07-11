@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use JMS\Serializer\Annotation as Serializer;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -45,16 +46,22 @@ class Product
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Serializer\Type("DateTime<'Y-m-d'>")
+     * @Serializer\Expose
      */
     private $discountEndDate;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Serializer\Type("DateTime<'Y-m-d'>")
+     * @Serializer\Expose
      */
     private $discountBeginDate;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Serializer\Type("DateTime<'Y-m-d'>")
+     * @Serializer\Expose
      */
     private $createdAt;
 
@@ -81,7 +88,7 @@ class Product
     /**
      * @var int
      *
-     *@ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="products")
+     *@ORM\ManyToOne(targetEntity="App\Entity\Category")
      *@ORM\JoinColumn(nullable=true )
      */
     private $category;
@@ -204,7 +211,7 @@ class Product
         return $this->discount;
     }
 
-    public function setDiscount(?int $discount): self
+    public function setDiscount(?int $discount): Product
     {
         $this->discount = $discount;
 
@@ -214,7 +221,7 @@ class Product
     /**
      * @return int
      */
-    public function getCategory(): int
+    public function getCategory()
     {
         return $this->category;
     }
@@ -233,7 +240,7 @@ class Product
     /**
      * @return int
      */
-    public function getSeller(): int
+    public function getSeller()
     {
         return $this->seller;
     }

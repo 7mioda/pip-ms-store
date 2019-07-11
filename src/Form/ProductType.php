@@ -23,7 +23,6 @@ class ProductType extends AbstractType
             ->add('discount')
             ->add('seller')
             ->add('category')
-            ->add('flashSales')
         ;
     }
 
