@@ -5,6 +5,7 @@
         "This file is @generated automatically"
     ],
     "content-hash": "706021dbdc7ff19c78e2021a5f9f9db2",
+
     "packages": [
         {
             "name": "cloudinary/cloudinary_php",

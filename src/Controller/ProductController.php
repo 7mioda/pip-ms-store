@@ -40,7 +40,7 @@ class ProductController extends AbstractFOSRestController
      * @return View|FormInterface
      * @Rest\View()
      */
-    public function new(Request $request): Response
+    public function new(Request $request)
     {
         $products = new Product();
         $form = $this->createForm(ProductType::class, $products);

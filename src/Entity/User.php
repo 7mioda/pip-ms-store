@@ -199,12 +199,12 @@ class User implements UserInterface, Serializable
         return $this;
     }
 
-    public function getCardNumber(): ?int
+    public function getCardNumber(): ?String
     {
         return $this->cardNumber;
     }
 
-    public function setCardNumber(?int $cardNumber): User
+    public function setCardNumber(?String $cardNumber): User
     {
         $this->cardNumber = $cardNumber;
 

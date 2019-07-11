@@ -18,5 +18,6 @@ class PublishController
         $publisher($update);
 
         return new Response('published!');
+
     }
 }
