@@ -12,8 +12,6 @@ use FOS\RestBundle\View\View;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mercure\Publisher;
-use Symfony\Component\Mercure\Update;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 
@@ -58,13 +56,7 @@ class UserController extends AbstractFOSRestController
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($user);
         $entityManager->flush();
-        $update = new Update(
-            'http://example.com/users',
-            json_encode(['status' => 'user created'])
-        );
-
-        // The Publisher service is an invokable object
-        $publisher($update);
+        $publisher->publish('http://example.com/users', ['status' => 'user created']);
 
         return View::create(null, Response::HTTP_CREATED, ['token' => $JWTManager->create($user)]);
     }
