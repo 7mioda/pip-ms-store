@@ -2,28 +2,29 @@
 
 namespace App\Form;
 
-use App\Entity\Category;
+use App\Entity\Order;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CategoryType extends AbstractType
+class OrderType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('description')
-            ->add('name')
-            ->add('products')
+            ->add('createdAt')
+            ->add('validatedAt')
+            ->add('totalPrice')
+            ->add('note')
+            ->add('user')
+            ->add('delivery')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Category::class,
-            'csrf_protection' => false,
-            'validation_groups' => false,
+            'data_class' => Order::class,
         ]);
     }
 }
