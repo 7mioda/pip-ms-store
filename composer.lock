@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "952ebd3bd0a8a93081719421283c2e9f",
+    "content-hash": "52cc557c29644eaceffe9560c1d9c9b7",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -6447,7 +6447,7 @@
         },
         {
             "name": "symfony/templating",
-            "version": "v4.3.1",
+            "version": "v4.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/templating.git",

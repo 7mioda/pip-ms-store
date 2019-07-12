@@ -4,3 +4,5 @@ framework:
     csrf_protection: false
     php_errors:
         log: true
+    
+            

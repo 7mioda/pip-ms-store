@@ -5,24 +5,25 @@ security:
     providers:
         in_memory: { memory: ~ }
     firewalls:
-        login:
-            pattern:  ^/api/login
-            stateless: true
-            anonymous: true
-            json_login:
-                check_path:               /api/login_check
-                success_handler:          lexik_jwt_authentication.handler.authentication_success
-                failure_handler:          lexik_jwt_authentication.handler.authentication_failure
-        subscription:
-            pattern:  ^/api/users/new
-            stateless: true
-            anonymous: true
-        api:
-            pattern:   ^/api
-            stateless: true
-            guard:
-                authenticators:
-                    - lexik_jwt_authentication.jwt_token_authenticator
+#        login:
+#            pattern:  ^/api/login
+#            stateless: true
+#            anonymous: true
+#            json_login:
+#                check_path:               /api/login_check
+#                success_handler:          lexik_jwt_authentication.handler.authentication_success
+#                failure_handler:          lexik_jwt_authentication.handler.authentication_failure
+#                require_previous_session: false
+#        subscription:
+#            pattern:  ^/api/users/new
+#            stateless: true
+#            anonymous: true
+#        api:
+#            pattern:   ^/api
+#            stateless: true
+#            guard:
+#                authenticators:
+#                    - lexik_jwt_authentication.jwt_token_authenticator
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false

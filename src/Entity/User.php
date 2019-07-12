@@ -7,6 +7,8 @@ use Serializable;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use App\Updates\SiteUpdateManager;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -277,5 +279,16 @@ class User implements UserInterface, Serializable
     public function eraseCredentials()
     {
         // TODO: Implement eraseCredentials() method.
+    }
+
+    public function new(SiteUpdateManager $siteUpdateManager)
+    {
+        // ...
+
+        if ($siteUpdateManager->notifyOfSiteUpdate()) {
+            $this->addFlash('success', 'Notification mail was sent successfully.');
+        }
+
+        // ...
     }
 }
