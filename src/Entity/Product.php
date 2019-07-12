@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use JMS\Serializer\Annotation as Serializer;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -9,10 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Product
 {
-    public function __construct()
-    {
-        $this->flashSales = new ArrayCollection();
-    }
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -31,14 +30,14 @@ class Product
     private $description;
 
     /**
-     * @ORM\Column(type="blob", nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $image;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $statut;
+    private $status;
 
     /**
      * @ORM\Column(type="float", nullable=true)
@@ -47,23 +46,64 @@ class Product
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Serializer\Type("DateTime<'Y-m-d'>")
+     * @Serializer\Expose
      */
     private $discountEndDate;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Serializer\Type("DateTime<'Y-m-d'>")
+     * @Serializer\Expose
      */
     private $discountBeginDate;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Serializer\Type("DateTime<'Y-m-d'>")
+     * @Serializer\Expose
      */
     private $createdAt;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     private $discount;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\OrderLine", mappedBy="product", orphanRemoval=true)
+     */
+    private $orderLines;
+
+
+    /**
+     * @var int
+     *
+     *@ORM\ManyToOne(targetEntity="App\Entity\User")
+     *@ORM\JoinColumn(name="seller", referencedColumnName="id" ,nullable=true )
+
+     */
+    private $seller;
+
+    /**
+     * @var int
+     *
+     *@ORM\ManyToOne(targetEntity="App\Entity\Category")
+     *@ORM\JoinColumn(nullable=true )
+     */
+    private $category;
+
+    /**
+     * Many Products have Many FlashSales.
+     * @ORM\ManyToMany(targetEntity="App\Entity\FlashSale", inversedBy="products")
+     * @ORM\JoinTable(name="flashSales")
+     */
+    private $flashSales;
+
+    public function __construct()
+    {
+        $this->flashSales = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -99,21 +139,21 @@ class Product
         return $this->image;
     }
 
-    public function setImage($image): self
+    public function setImage($image): Product
     {
         $this->image = $image;
 
         return $this;
     }
 
-    public function getStatut(): ?string
+    public function getStatus(): ?string
     {
-        return $this->statut;
+        return $this->status;
     }
 
-    public function setStatut(?string $statut): self
+    public function setStatus(?string $status): Product
     {
-        $this->statut = $statut;
+        $this->status = $status;
 
         return $this;
     }
@@ -130,36 +170,36 @@ class Product
         return $this;
     }
 
-    public function getDiscountEndDate(): ?\DateTimeInterface
+    public function getDiscountEndDate(): ?DateTimeInterface
     {
         return $this->discountEndDate;
     }
 
-    public function setDiscountEndDate(?\DateTimeInterface $discountEndDate): self
+    public function setDiscountEndDate(?DateTimeInterface $discountEndDate): Product
     {
         $this->discountEndDate = $discountEndDate;
 
         return $this;
     }
 
-    public function getDiscountBeginDate(): ?\DateTimeInterface
+    public function getDiscountBeginDate(): ?DateTimeInterface
     {
         return $this->discountBeginDate;
     }
 
-    public function setDiscountBeginDate(?\DateTimeInterface $discountBeginDate): self
+    public function setDiscountBeginDate(?DateTimeInterface $discountBeginDate): Product
     {
         $this->discountBeginDate = $discountBeginDate;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(?\DateTimeInterface $createdAt): self
+    public function setCreatedAt(?DateTimeInterface $createdAt): Product
     {
         $this->createdAt = $createdAt;
 
@@ -171,7 +211,7 @@ class Product
         return $this->discount;
     }
 
-    public function setDiscount(?int $discount): self
+    public function setDiscount(?int $discount): Product
     {
         $this->discount = $discount;
 
@@ -179,59 +219,42 @@ class Product
     }
 
     /**
-     * @var int
-     *
-     *@ORM\ManyToOne(targetEntity="App\Entity\Category")
-     *@ORM\JoinColumn(name="category", referencedColumnName="id" ,onDelete="CASCADE",nullable=true )
-
-     */
-    private $category;
-
-    /**
      * @return int
      */
-    public function getCategory(): int
+    public function getCategory()
     {
         return $this->category;
     }
 
     /**
      * @param int $category
+     * @return Product
      */
-    public function setCategory(int $category): void
+    public function setCategory(int $category): Product
     {
         $this->category = $category;
+
+        return $this;
     }
-
-    /**
-     * @var int
-     *
-     *@ORM\ManyToOne(targetEntity="App\Entity\User")
-     *@ORM\JoinColumn(name="seller", referencedColumnName="id" ,onDelete="CASCADE",nullable=true )
-
-     */
-    private $seller;
 
     /**
      * @return int
      */
-    public function getSeller(): int
+    public function getSeller()
     {
         return $this->seller;
     }
 
     /**
      * @param int $seller
+     * @return Product
      */
-    public function setSeller(int $seller): void
+    public function setSeller(int $seller): Product
     {
         $this->seller = $seller;
-    }
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\OrderLine", mappedBy="product", orphanRemoval=true)
-     */
-    private $orderLines;
+        return $this;
+    }
 
     /**
      * @return mixed
@@ -243,24 +266,20 @@ class Product
 
     /**
      * @param mixed $orderLines
+     * @return Product
      */
-    public function setOrderLines($orderLines): void
+    public function setOrderLines($orderLines): Product
     {
         $this->orderLines = $orderLines;
+
+        return $this;
     }
-    /**
-     * Many Products have Many FlashSales.
-     * @ORM\ManyToMany(targetEntity="App\Entity\FlashSale", inversedBy="products")
-     * @ORM\JoinTable(name="flashSales")
-     */
-    private $flashSales;
 
-
-    public function getFlashSales(): Collection
+    public function getFlashSales(): ArrayCollection
     {
         return $this->flashSales;
     }
-    public function addFlashSale(FlashSale $flashSale): self
+    public function addFlashSale(FlashSale $flashSale): Product
     {
         if (!$this->flashSales->contains($flashSale)) {
             $this->flashSales[] = $flashSale;
@@ -268,7 +287,7 @@ class Product
         }
         return $this;
     }
-    public function removeFlashSale(FlashSale $flashSale): self
+    public function removeFlashSale(FlashSale $flashSale): Product
     {
         if ($this->flashSales->contains($flashSale)) {
             $this->flashSales->removeElement($flashSale);

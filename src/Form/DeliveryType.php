@@ -13,8 +13,6 @@ class DeliveryType extends AbstractType
     {
         $builder
             ->add('status')
-            ->add('parcour')
-            ->add('timeValidUser')
             ->add('order')
         ;
     }

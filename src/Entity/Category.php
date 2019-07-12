@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Entity;
-
+use Doctrine\Common\Collections\Collection as ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -26,6 +26,19 @@ class Category
      */
     private $name;
 
+//    /**
+//     * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="category")
+//     */
+//    private $products;
+//
+//    /**
+//     * Constructor
+//     */
+//    public function __construct() {
+//        $this->products = new ArrayCollection();
+//    }
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -36,7 +49,7 @@ class Category
         return $this->description;
     }
 
-    public function setDescription(?string $description): self
+    public function setDescription(?string $description): Category
     {
         $this->description = $description;
 
@@ -48,35 +61,35 @@ class Category
         return $this->name;
     }
 
-    public function setName(?string $name): self
+    public function setName(?string $name): Category
     {
         $this->name = $name;
 
         return $this;
     }
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="category", orphanRemoval=true)
-     */
-    private $products;
+    public function setProducts($products): Category
+    {
+        $this->products = $products;
+        return $this;
+    }
 
-    public function getProducts(): Collection
+    public function getProducts()
     {
         return $this->products;
     }
-    public function addProduct(Product $product): self
+
+    public function addProduct(Product $product): Category
     {
         if (!$this->products->contains($product)) {
-            $this->products[] = $product;
-            $product->addFlashSale($this);
+            $this->products->setChildren($product);
         }
         return $this;
     }
-    public function removeProduct(Product $product): self
+    public function removeProduct(Product $product): Category
     {
-        if ($this->articles->contains($product)) {
-            $this->articles->removeElement($product);
-            $product->removeFlashSale($this);
+        if ($this->products->contains($product)) {
+            $this->products->removeElement($product);
         }
         return $this;
     }

@@ -38,10 +38,11 @@ class UserController extends AbstractFOSRestController
      * @param Request $request
      * @param UserPasswordEncoderInterface $encoder
      * @param JWTTokenManagerInterface $JWTManager
+     * @param Publisher $publisher
      * @return View|FormInterface
      * @Rest\View()
      */
-    public function inscription(Request $request, UserPasswordEncoderInterface $encoder, JWTTokenManagerInterface $JWTManager)
+    public function inscription(Request $request, UserPasswordEncoderInterface $encoder, JWTTokenManagerInterface $JWTManager, Publisher $publisher)
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -51,11 +52,25 @@ class UserController extends AbstractFOSRestController
             return $form;
         }
         $encoded = $encoder->encodePassword($user, $user->getPassword());
-        $user->setPassword($encoded);
+        $user->setPassword($user->getPassword());
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($user);
         $entityManager->flush();
+        $publisher->publish('http://example.com/users', ['status' => 'user created']);
+
         return View::create(null, Response::HTTP_CREATED, ['token' => $JWTManager->create($user)]);
+    }
+
+    /**
+     * @Rest\Post("/users/login", name="login")
+     * @param Request $request
+     * @param JWTTokenManagerInterface $JWTManager
+     * @return View|FormInterface
+     * @Rest\View()
+     */
+    public function login(Request $request, JWTTokenManagerInterface $JWTManager)
+    {
+        return View::create(null, Response::HTTP_CREATED, ['token' => 'ddddd']);
     }
 
     /**

@@ -26,10 +26,22 @@ class OrderLine
      */
     private $price;
 
+
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * Many OrderLines have one order. This is the owning side.
+     * @ORM\ManyToOne(targetEntity="App\Entity\Order", inversedBy="orderLines")
+     * @ORM\JoinColumn(name="order", referencedColumnName="id")
      */
-    private $description;
+    private $order;
+
+    /**
+     *
+     *
+     *@ORM\ManyToOne(targetEntity="App\Entity\Product")
+     *@ORM\JoinColumn(name="product", referencedColumnName="id")
+
+     */
+    private $product;
 
     public function getId(): ?int
     {
@@ -41,7 +53,7 @@ class OrderLine
         return $this->quantity;
     }
 
-    public function setQuantity(?int $quantity): self
+    public function setQuantity(?int $quantity): OrderLine
     {
         $this->quantity = $quantity;
 
@@ -53,55 +65,31 @@ class OrderLine
         return $this->price;
     }
 
-    public function setPrice(?float $price): self
+    public function setPrice(?float $price): OrderLine
     {
         $this->price = $price;
 
         return $this;
     }
 
-    public function getDescription(): ?string
+    /**
+     * @return Product
+     */
+    public function getProduct(): Product
     {
-        return $this->description;
+        return $this->product;
     }
 
-    public function setDescription(?string $description): self
+    /**
+     * @param Product $product
+     * @return OrderLine
+     */
+    public function setProduct(Product $product): OrderLine
     {
-        $this->description = $description;
+        $this->product = $product;
 
         return $this;
     }
-    /**
-     * @var int
-     *
-     *@ORM\ManyToOne(targetEntity="App\Entity\Product")
-     *@ORM\JoinColumn(name="product", referencedColumnName="id" ,onDelete="CASCADE",nullable=true )
-
-     */
-    private $category;
-
-    /**
-     * @return int
-     */
-    public function getCategory(): int
-    {
-        return $this->category;
-    }
-
-    /**
-     * @param int $category
-     */
-    public function setCategory(int $category): void
-    {
-        $this->category = $category;
-    }
-
-    /**
-     * Many OrderLines have one order. This is the owning side.
-     * @ORM\ManyToOne(targetEntity="App\Entity\Order", inversedBy="orderLines")
-     * @ORM\JoinColumn(name="order", referencedColumnName="id")
-     */
-    private $order;
 
     /**
      * @return mixed
@@ -113,9 +101,12 @@ class OrderLine
 
     /**
      * @param mixed $order
+     * @return OrderLine
      */
-    public function setOrder($order): void
+    public function setOrder($order): OrderLine
     {
         $this->order = $order;
+
+        return $this;
     }
 }

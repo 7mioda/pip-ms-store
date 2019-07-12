@@ -12,7 +12,7 @@ class FlashSaleType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('BeginDate')
+            ->add('beginDate')
             ->add('endDate')
             ->add('price')
             ->add('products')
