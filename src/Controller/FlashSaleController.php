@@ -20,7 +20,7 @@ class FlashSaleController extends AbstractFOSRestController
 {
 
     /**
-     * @Rest\Get("/flashSales", name="flash_sale_index")
+     * @Rest\Get("/flash-sales", name="flash_sale_index")
      * @param FlashSaleRepository $flashSaleRepository
      * @return View
      * @Rest\View()
@@ -36,12 +36,12 @@ class FlashSaleController extends AbstractFOSRestController
 
 
     /**
-     * @Rest\Post("/flashSale/new", name="flash_sale_new")
+     * @Rest\Post("/flash-sales/new", name="flash_sale_new")
      * @param Request $request
      * @return View|FormInterface
      * @Rest\View()
      */
-    public function new(Request $request): View
+    public function new(Request $request)
     {
         $flashSale = new FlashSale();
         $form = $this->createForm(FlashSaleType::class, $flashSale);
@@ -59,7 +59,7 @@ class FlashSaleController extends AbstractFOSRestController
 
 
     /**
-     * @Rest\Get("/flashSale/{id}", name="flash_sale_show")
+     * @Rest\Get("/flash-sales/{id}", name="flash_sale_show")
      * @param FlashSale $flashSale
      * @return View
      */
@@ -74,7 +74,7 @@ class FlashSaleController extends AbstractFOSRestController
 
 
     /**
-     * @Rest\Post("flashSale/edit/{id}", name="flash_sale_edit")
+     * @Rest\Post("flash-sales/edit/{id}", name="flash_sale_edit")
      * @param Request $request
      * @param FlashSale $flashSale
      * @return View|FormInterface
@@ -100,7 +100,7 @@ class FlashSaleController extends AbstractFOSRestController
 
 
     /**
-     * @Rest\Delete("/flashSale/delete/{id}", name="flash_sale_delete")
+     * @Rest\Delete("/flash-sales/delete/{id}", name="flash_sale_delete")
      * @param FlashSale $flashSale
      * @return View
      */
