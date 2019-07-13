@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation as Serializer;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -46,22 +47,22 @@ class Product
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @Serializer\Type("DateTime<'Y-m-d'>")
-     * @Serializer\Expose
+     * @Assert\DateTime
+     * @var string A "Y-m-d H:i:s" formatted value
      */
     private $discountEndDate;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @Serializer\Type("DateTime<'Y-m-d'>")
-     * @Serializer\Expose
+     * @Assert\DateTime
+     * @var string A "Y-m-d H:i:s" formatted value
      */
     private $discountBeginDate;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @Serializer\Type("DateTime<'Y-m-d'>")
-     * @Serializer\Expose
+     * @Assert\DateTime
+     * @var string A "Y-m-d H:i:s" formatted value
      */
     private $createdAt;
 
@@ -77,7 +78,7 @@ class Product
 
 
     /**
-     * @var int
+     * @var User
      *
      *@ORM\ManyToOne(targetEntity="App\Entity\User")
      *@ORM\JoinColumn(name="seller", referencedColumnName="id" ,nullable=true )
@@ -86,7 +87,7 @@ class Product
     private $seller;
 
     /**
-     * @var int
+     * @var Category
      *
      *@ORM\ManyToOne(targetEntity="App\Entity\Category")
      *@ORM\JoinColumn(nullable=true )
@@ -219,7 +220,7 @@ class Product
     }
 
     /**
-     * @return int
+     * @return Category
      */
     public function getCategory()
     {
@@ -227,10 +228,10 @@ class Product
     }
 
     /**
-     * @param int $category
+     * @param Category $category
      * @return Product
      */
-    public function setCategory(int $category): Product
+    public function setCategory(Category $category): Product
     {
         $this->category = $category;
 
@@ -238,7 +239,7 @@ class Product
     }
 
     /**
-     * @return int
+     * @return User
      */
     public function getSeller()
     {
@@ -246,10 +247,10 @@ class Product
     }
 
     /**
-     * @param int $seller
+     * @param User $seller
      * @return Product
      */
-    public function setSeller(int $seller): Product
+    public function setSeller(User $seller): Product
     {
         $this->seller = $seller;
 

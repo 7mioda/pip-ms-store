@@ -6,6 +6,7 @@ use App\Entity\Product;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class ProductType extends AbstractType
 {
@@ -17,19 +18,29 @@ class ProductType extends AbstractType
             ->add('image')
             ->add('status')
             ->add('price')
-            ->add('discountEndDate')
-            ->add('discountBeginDate')
-            ->add('createdAt')
+            ->add('discountEndDate', DateTimeType::class, array(
+                'widget' => 'single_text',
+            ))
+            ->add('discountBeginDate', DateTimeType::class, array(
+                'widget' => 'single_text',
+            ))
+            ->add('createdAt', DateTimeType::class, array(
+                'widget' => 'single_text',
+            ))
             ->add('discount')
             ->add('seller')
             ->add('category')
         ;
     }
 
+//2011-06-05 12:15:00
+
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => Product::class,
+            'csrf_protection' => false,
+            'validation_groups' => false,
         ]);
     }
 }
