@@ -2,6 +2,12 @@ App\Entity\FlashSale:
   properties:
     id:
       groups: ['service']
+    name:
+      groups: ['service']
+    description:
+      groups: ['service']
+    image:
+      groups: ['service']
     beginDate:
       groups: ['service']
     endDate:

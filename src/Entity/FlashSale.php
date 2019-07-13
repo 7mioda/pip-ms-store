@@ -19,6 +19,16 @@ class FlashSale
     private $id;
 
     /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $description;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $name;
+
+    /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $beginDate;
@@ -32,6 +42,11 @@ class FlashSale
      * @ORM\Column(type="float", nullable=true)
      */
     private $price;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $image;
 
     /**
      * Many flashSales have Many products.
@@ -48,6 +63,30 @@ class FlashSale
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): FlashSale
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): FlashSale
+    {
+        $this->name = $name;
+
+        return $this;
     }
 
     public function getBeginDate(): ?DateTimeInterface
@@ -70,6 +109,18 @@ class FlashSale
     public function setEndDate(?DateTimeInterface $endDate): FlashSale
     {
         $this->endDate = $endDate;
+
+        return $this;
+    }
+
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    public function setImage($image): FlashSale
+    {
+        $this->image = $image;
 
         return $this;
     }

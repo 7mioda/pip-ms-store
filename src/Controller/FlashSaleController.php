@@ -40,12 +40,12 @@ class FlashSaleController extends AbstractFOSRestController
     /**
      * @Rest\Post("/flash-sales/new", name="flash_sale_new")
      * @param Request $request
-     * @param ProductRepository $productRepository
      * @param EntityManagerInterface $entityManager
+     * @param Uploader $uploader
      * @return View|FormInterface
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"service"})
      */
-    public function new(Request $request, EntityManagerInterface $entityManager)
+    public function new(Request $request, EntityManagerInterface $entityManager, Uploader $uploader)
     {
         $flashSale = new FlashSale();
         $form = $this->createForm(FlashSaleType::class, $flashSale);
@@ -54,9 +54,12 @@ class FlashSaleController extends AbstractFOSRestController
         if(!$form->isValid()){
             return $form;
         }
+        $image = $uploader->uploadImage($request->files->get('image'), []);
+        $flashSale->setImage(($image));
         $entityManager->persist($flashSale);
         $entityManager->flush();
         return View::create($flashSale, Response::HTTP_CREATED,[]);
+
     }
 
 

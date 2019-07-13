@@ -17,16 +17,15 @@ class FlashSaleType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('name')
+            ->add('description')
             ->add('beginDate', DateTimeType::class, [
                 'widget' => 'single_text',
             ])
             ->add('endDate', DateTimeType::class, [
                 'widget' => 'single_text',
             ])
-//            ->add('products',  CollectionType::class, [
-//                'entry_type' => ProductType::class,
-//                'allow_add' => true,
-//            ])
+            ->add('image')
             ->add('products',  EntityType::class, [
                 'choice_label' => 'id',
                 'by_reference' => true,
