@@ -1,0 +1,12 @@
+App\Entity\FlashSale:
+  properties:
+    id:
+      groups: ['service']
+    beginDate:
+      groups: ['service']
+    endDate:
+      groups: ['service']
+    price:
+      groups: ['service']
+    products:
+      groups: ['service']
