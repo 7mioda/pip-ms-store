@@ -6,6 +6,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
@@ -37,13 +38,12 @@ class UserController extends AbstractFOSRestController
 
     /**
      * @Rest\Get("/users/reset-password-mail/{id}", name="user_reset_password_mail")
-     * @param Request $request
      * @param User $user
      * @param Mailer $mailer
      * @return View
      * @Rest\View()
      */
-    public function resetPasswordMail(Request $request, User $user, Mailer $mailer)
+    public function resetPasswordMail(User $user, Mailer $mailer)
     {
         $token = rand (1000000,9999999);
         try {
@@ -64,15 +64,18 @@ class UserController extends AbstractFOSRestController
      * @Rest\Get("/users/reset-password/{id}", name="user_reset_password")
      * @param Request $request
      * @param User $user
+     * @param EntityManagerInterface $entityManager
      * @return View
      * @Rest\View()
      */
-    public function resetPassword(Request $request, User $user)
+    public function resetPassword(Request $request, User $user, EntityManagerInterface $entityManager)
     {
         $token = $request->query->get('token');
         if ($token){
            $user->setPassword($token);
         }
+        $entityManager->persist($user);
+        $entityManager->flush();
         return View::create([], Response::HTTP_OK, []);
     }
 
