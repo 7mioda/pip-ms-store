@@ -18,7 +18,7 @@ class DeliveryController extends AbstractController
 {
 
     /**
-     * @Rest\Get("/delivery", name="delivery_index")
+     * @Rest\Get("/deliveries", name="delivery_index")
      * @param DeliveryRepository $deliveryRepository
      * @return View
      * @Rest\View()
@@ -33,7 +33,7 @@ class DeliveryController extends AbstractController
 
 
     /**
-     * @Rest\Post("/delivery/new", name="delivery_new")
+     * @Rest\Post("/deliveries/new", name="delivery_new")
      * @param Request $request
      * @return View|FormInterface
      * @Rest\View()
@@ -58,7 +58,7 @@ class DeliveryController extends AbstractController
 
 
     /**
-     * @Rest\Get("/delivery/{id}", name="delivery_show")
+     * @Rest\Get("/deliveries/{id}", name="delivery_show")
      * @param Delivery $delivery
      * @return View
      */
@@ -73,7 +73,7 @@ class DeliveryController extends AbstractController
 
 
     /**
-     * @Rest\Post("delivery/edit/{id}", name="delivery_edit")
+     * @Rest\Post("/deliveries/edit/{id}", name="delivery_edit")
      * @param Request $request
      * @param Delivery $delivery
      * @return View|FormInterface
@@ -98,7 +98,7 @@ class DeliveryController extends AbstractController
 
 
     /**
-     * @Rest\Delete("/delivery/delete/{id}", name="delivery_delete")
+     * @Rest\Delete("/deliveries/delete/{id}", name="delivery_delete")
      * @param Delivery $delivery
      * @return View
      */

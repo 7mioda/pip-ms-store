@@ -30,16 +30,14 @@ class OrderLine
     /**
      * Many OrderLines have one order. This is the owning side.
      * @ORM\ManyToOne(targetEntity="App\Entity\Order", inversedBy="orderLines")
-     * @ORM\JoinColumn(name="order", referencedColumnName="id")
+//     * @ORM\JoinColumn(name="order", referencedColumnName="id")
      */
     private $order;
 
     /**
      *
-     *
-     *@ORM\ManyToOne(targetEntity="App\Entity\Product")
-     *@ORM\JoinColumn(name="product", referencedColumnName="id")
-
+     * @ORM\ManyToOne(targetEntity="App\Entity\Product")
+     * @ORM\JoinColumn(name="product", referencedColumnName="id")
      */
     private $product;
 
