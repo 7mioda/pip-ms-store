@@ -19,9 +19,6 @@ class DeliveryType extends AbstractType
             ->add('address')
             ->add('coordinateX')
             ->add('coordinateY')
-            ->add('createdAt', DateTimeType::class, [
-                'widget' => 'single_text',
-            ])
             ->add('deliveredAt', DateTimeType::class, [
                 'widget' => 'single_text',
             ])

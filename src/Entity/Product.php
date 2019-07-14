@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -103,6 +104,7 @@ class Product
 
     public function __construct()
     {
+        $this->createdAt = new DateTime();
         $this->flashSales = new ArrayCollection();
     }
 

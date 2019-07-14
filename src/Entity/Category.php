@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Entity;
-use Doctrine\Common\Collections\Collection as ArrayCollection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -26,17 +26,17 @@ class Category
      */
     private $name;
 
-//    /**
-//     * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="category")
-//     */
-//    private $products;
-//
-//    /**
-//     * Constructor
-//     */
-//    public function __construct() {
-//        $this->products = new ArrayCollection();
-//    }
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="category")
+     */
+    private $products;
+
+    /**
+     * Constructor
+     */
+    public function __construct() {
+        $this->products = new ArrayCollection();
+    }
 
 
     public function getId(): ?int
@@ -82,7 +82,7 @@ class Category
     public function addProduct(Product $product): Category
     {
         if (!$this->products->contains($product)) {
-            $this->products->setChildren($product);
+            $this->products[] = $product;
         }
         return $this;
     }

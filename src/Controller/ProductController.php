@@ -49,8 +49,11 @@ class ProductController extends AbstractFOSRestController
         if(!$form->isValid()){
             return $form;
         }
-            $image = $uploader->uploadImage($request->files->get('image'), []);
-            $products->setImage($image);
+            $file = $request->files->get('image');
+            if($file){
+                $image = $uploader->uploadImage($file, []);
+                $products->setImage($image);
+            }
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($products);
             $entityManager->flush();

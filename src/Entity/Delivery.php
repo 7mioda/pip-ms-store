@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -52,6 +53,11 @@ class Delivery
      * @ORM\Column(name="validated_at", type="datetime", nullable=true)
      */
     private $deliveredAt;
+
+    public function __construct()
+    {
+        $this->createdAt = new DateTime();
+    }
 
     public function getId(): ?int
     {

@@ -24,9 +24,6 @@ class ProductType extends AbstractType
             ->add('discountBeginDate', DateTimeType::class, array(
                 'widget' => 'single_text',
             ))
-            ->add('createdAt', DateTimeType::class, array(
-                'widget' => 'single_text',
-            ))
             ->add('discount')
             ->add('seller')
             ->add('category')

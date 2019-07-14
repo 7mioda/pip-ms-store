@@ -2,9 +2,11 @@
 
 namespace App\Entity;
 
+use DateTime;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\FlashSaleRepository")
@@ -55,8 +57,14 @@ class FlashSale
      */
     private $products;
 
+    /**
+     * @ORM\Column(name="created_at",type="datetime")
+     */
+    private $createdAt;
+
     public function __construct()
     {
+        $this->createdAt = new DateTime();
         $this->products = new ArrayCollection();
     }
 
@@ -157,6 +165,25 @@ class FlashSale
             $product->removeFlashSale($this);
         }
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param mixed $createdAt
+     * @return FlashSale
+     */
+    public function setCreatedAt($createdAt): FlashSale
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+
     }
 
 }
