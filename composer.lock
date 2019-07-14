@@ -6679,7 +6679,7 @@
         },
         {
             "name": "symfony/templating",
-            "version": "v4.3.1",
+            "version": "v4.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/templating.git",
