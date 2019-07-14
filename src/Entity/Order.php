@@ -68,7 +68,7 @@ class Order
         return $this->id;
     }
 
-    public function getCreatedAt(): DateTimeInterface
+    public function getCreatedAt()
     {
         return $this->createdAt;
     }
