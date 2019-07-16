@@ -87,7 +87,7 @@ class ProductController extends AbstractFOSRestController
 
         if (!$form->isValid()) {
             return $form;
-        }
+         }
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($product);
         $entityManager->flush();
