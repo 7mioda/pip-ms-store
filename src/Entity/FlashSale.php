@@ -2,9 +2,11 @@
 
 namespace App\Entity;
 
+use DateTime;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\FlashSaleRepository")
@@ -17,6 +19,16 @@ class FlashSale
      * @ORM\Column(type="integer")
      */
     private $id;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $description;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $name;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -34,20 +46,55 @@ class FlashSale
     private $price;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $image;
+
+    /**
      * Many flashSales have Many products.
      * @ORM\ManyToMany(targetEntity="App\Entity\Product", inversedBy="flashSales")
      * @ORM\JoinTable(name="products")
      */
     private $products;
 
+    /**
+     * @ORM\Column(name="created_at",type="datetime")
+     */
+    private $createdAt;
+
     public function __construct()
     {
+        $this->createdAt = new DateTime();
         $this->products = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): FlashSale
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): FlashSale
+    {
+        $this->name = $name;
+
+        return $this;
     }
 
     public function getBeginDate(): ?DateTimeInterface
@@ -70,6 +117,18 @@ class FlashSale
     public function setEndDate(?DateTimeInterface $endDate): FlashSale
     {
         $this->endDate = $endDate;
+
+        return $this;
+    }
+
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    public function setImage($image): FlashSale
+    {
+        $this->image = $image;
 
         return $this;
     }
@@ -106,6 +165,25 @@ class FlashSale
             $product->removeFlashSale($this);
         }
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param mixed $createdAt
+     * @return FlashSale
+     */
+    public function setCreatedAt($createdAt): FlashSale
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+
     }
 
 }

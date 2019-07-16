@@ -1,0 +1,16 @@
+App\Entity\Product:
+  properties:
+    id:
+      groups: ['service']
+    name:
+      groups: ['service']
+    description:
+      groups: ['service']
+    image:
+      groups: ['service']
+    status:
+      groups: ['service']
+    price:
+      groups: ['service']
+    discountEndDate:
+      groups: ['service']  

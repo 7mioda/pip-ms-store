@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Category;
 use App\Form\CategoryType;
 use App\Repository\CategoryRepository;
-use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
@@ -35,11 +35,11 @@ class CategoryController extends AbstractFOSRestController
     /**
      * @Rest\Post("/categories/new", name="category_new")
      * @param Request $request
-     * @param Uploader $uploader
+     * @param EntityManagerInterface $entityManager
      * @return View|FormInterface
      * @Rest\View()
      */
-    public function new(Request $request, Uploader $uploader): View
+    public function new(Request $request, EntityManagerInterface $entityManager)
     {
         $category = new Category();
         $form = $this->createForm(CategoryType::class, $category);
@@ -47,14 +47,10 @@ class CategoryController extends AbstractFOSRestController
         if(!$form->isValid()){
             return $form;
         }
-        ### test file Uploads
-        $image = $uploader->uploadImage($request->files->get('description'), []);
-        $category->setDescription($image);
-        ### test file Uploads
-        $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($category);
         $entityManager->flush();
         return View::create($category, Response::HTTP_CREATED,[]);
+
     }
 
 

@@ -6,6 +6,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
@@ -14,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use Twig\Error\Error;
 
 
 class UserController extends AbstractFOSRestController
@@ -31,6 +33,50 @@ class UserController extends AbstractFOSRestController
             throw $this->createNotFoundException("Data not found.");
         }
         return View::create($users, Response::HTTP_OK, []);
+    }
+
+
+    /**
+     * @Rest\Get("/users/reset-password-mail/{id}", name="user_reset_password_mail")
+     * @param User $user
+     * @param Mailer $mailer
+     * @return View
+     * @Rest\View()
+     */
+    public function resetPasswordMail(User $user, Mailer $mailer)
+    {
+        $token = rand (1000000,9999999);
+        try {
+            $mailer->sendResettingEmailMessage(
+                [
+                    'username' => $user->getFirstName() . ' ' . $user->getLastName(),
+                    'confirmationLink' => 'http://localhost:8000/api/users/reset-password/'.$user->getId().'?token='.$token,
+                    'email' => $user->getEmail()
+                ]
+            );
+        } catch (Error $e) {
+            return View::create($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        return View::create([], Response::HTTP_OK, []);
+    }
+
+    /**
+     * @Rest\Get("/users/reset-password/{id}", name="user_reset_password")
+     * @param Request $request
+     * @param User $user
+     * @param EntityManagerInterface $entityManager
+     * @return View
+     * @Rest\View()
+     */
+    public function resetPassword(Request $request, User $user, EntityManagerInterface $entityManager)
+    {
+        $token = $request->query->get('token');
+        if ($token){
+           $user->setPassword($token);
+        }
+        $entityManager->persist($user);
+        $entityManager->flush();
+        return View::create([], Response::HTTP_OK, []);
     }
 
     /**

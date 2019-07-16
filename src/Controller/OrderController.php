@@ -34,7 +34,7 @@ class OrderController extends AbstractFOSRestController
 
 
     /**
-     * @Rest\Post("/order/new", name="order_new")
+     * @Rest\Post("/orders/new", name="order_new")
      * @param Request $request
      * @return View|FormInterface
      * @Rest\View()

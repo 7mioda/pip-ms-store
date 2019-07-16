@@ -6,6 +6,8 @@ namespace App\Controller;
 use App\Entity\FlashSale;
 use App\Form\FlashSaleType;
 use App\Repository\FlashSaleRepository;
+use App\Repository\ProductRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -20,10 +22,10 @@ class FlashSaleController extends AbstractFOSRestController
 {
 
     /**
-     * @Rest\Get("/flashSales", name="flash_sale_index")
+     * @Rest\Get("/flash-sales", name="flash_sale_index")
      * @param FlashSaleRepository $flashSaleRepository
+     * @Rest\View(serializerGroups={"service"})
      * @return View
-     * @Rest\View()
      */
     public function index(FlashSaleRepository $flashSaleRepository)
     {
@@ -36,12 +38,14 @@ class FlashSaleController extends AbstractFOSRestController
 
 
     /**
-     * @Rest\Post("/flashSale/new", name="flash_sale_new")
+     * @Rest\Post("/flash-sales/new", name="flash_sale_new")
      * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @param Uploader $uploader
      * @return View|FormInterface
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"service"})
      */
-    public function new(Request $request): View
+    public function new(Request $request, EntityManagerInterface $entityManager, Uploader $uploader)
     {
         $flashSale = new FlashSale();
         $form = $this->createForm(FlashSaleType::class, $flashSale);
@@ -50,16 +54,17 @@ class FlashSaleController extends AbstractFOSRestController
         if(!$form->isValid()){
             return $form;
         }
-
-        $entityManager = $this->getDoctrine()->getManager();
+        $image = $uploader->uploadImage($request->files->get('image'), []);
+        $flashSale->setImage(($image));
         $entityManager->persist($flashSale);
         $entityManager->flush();
         return View::create($flashSale, Response::HTTP_CREATED,[]);
+
     }
 
 
     /**
-     * @Rest\Get("/flashSale/{id}", name="flash_sale_show")
+     * @Rest\Get("/flash-sales/{id}", name="flash_sale_show")
      * @param FlashSale $flashSale
      * @return View
      */
@@ -74,12 +79,13 @@ class FlashSaleController extends AbstractFOSRestController
 
 
     /**
-     * @Rest\Post("flashSale/edit/{id}", name="flash_sale_edit")
+     * @Rest\Post("flash-sales/edit/{id}", name="flash_sale_edit")
      * @param Request $request
      * @param FlashSale $flashSale
+     * @param EntityManagerInterface $entityManager
      * @return View|FormInterface
      */
-    public function edit(Request $request, FlashSale $flashSale)
+    public function edit(Request $request, FlashSale $flashSale, EntityManagerInterface $entityManager)
     {
         if (!$flashSale) {
             throw $this->createNotFoundException("Data not found.");
@@ -91,7 +97,6 @@ class FlashSaleController extends AbstractFOSRestController
         if (!$form->isValid()) {
             return $form;
         }
-        $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($flashSale);
         $entityManager->flush();
         return View::create($flashSale, Response::HTTP_OK, []);
@@ -100,16 +105,16 @@ class FlashSaleController extends AbstractFOSRestController
 
 
     /**
-     * @Rest\Delete("/flashSale/delete/{id}", name="flash_sale_delete")
+     * @Rest\Delete("/flash-sales/delete/{id}", name="flash_sale_delete")
      * @param FlashSale $flashSale
+     * @param EntityManagerInterface $entityManager
      * @return View
      */
-    public function delete( FlashSale $flashSale): View
+    public function delete( FlashSale $flashSale, EntityManagerInterface $entityManager): View
     {
         if (!$flashSale) {
             throw $this->createNotFoundException("Data not found.");
         }
-        $entityManager = $this->getDoctrine()->getManager();
         $entityManager->remove($flashSale);
         $entityManager->flush();
         return View::create(null,Response::HTTP_OK);
