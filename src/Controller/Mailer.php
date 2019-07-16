@@ -50,8 +50,8 @@ class Mailer
     {
         $subject = '[plantify.com] Réinitialisation de votre mot de passe';
         $body = $this->setTemplate(
-            'Mailer/reset_password.html.twig',
-            ['username' => $infoUser['username'], 'confirmationLink' => $infoUser['confirmationLink']]);
+            'Mailer/genericEmail.html.twig',
+            ['username' => $infoUser['username'], 'imageProfile' => $infoUser['imageProfile'],'confirmationLink' => $infoUser['confirmationLink']]);
         $this->sendEmailMessage($infoUser['email'], $subject, $body);
     }
 

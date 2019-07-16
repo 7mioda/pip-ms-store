@@ -19,10 +19,10 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
-    // /**
-    //  * @return Product[] Returns an array of Product objects
-    //  */
-    /*
+    /**
+     * @return Product[] Returns an array of Product objects
+     */
+    
     public function findByExampleField($value)
     {
         return $this->createQueryBuilder('p')
@@ -34,9 +34,9 @@ class ProductRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-    */
+    
 
-    /*
+    
     public function findOneBySomeField($value): ?Product
     {
         return $this->createQueryBuilder('p')
@@ -46,5 +46,31 @@ class ProductRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
         ;
     }
-    */
+    
+    public function findArray($array)
+    {
+        $qb = $this->createQueryBuilder('u')
+            ->Select('u')->where('u.id IN (:array)')
+            ->setParameter('array',$array);
+        return $qb->getQuery()->getResult();
+    }
+
+    public function DQL($categories){
+        $query=$this->getEntityManager()
+            ->createQuery("
+            select p from Product p
+            where p.category=:P 
+            ")->setParameter('P',$categories);
+        return $query->getResult();
+
+    }
+
+    public function findAllOrderedByName()
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT p FROM  \'pip-pi-dev\'.\'product\' AS p ORDER BY p.id ASC'
+            )
+            ->getResult();
+    }
 }
