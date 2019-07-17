@@ -1,0 +1,12 @@
+App\Entity\Comment:
+  properties:
+    id:
+      groups: ['service', 'commentService']
+    content:
+      groups: ['service', 'commentService']
+    user:
+      groups: ['service', 'commentService']
+    createdAt:
+      groups: ['service', 'commentService']
+    post:
+      groups: ['commentService']

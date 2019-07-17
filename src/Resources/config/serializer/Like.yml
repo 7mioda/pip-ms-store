@@ -1,0 +1,8 @@
+App\Entity\Like:
+  properties:
+    id:
+      groups: ['service']
+    user:
+      groups: ['service']
+    post:
+      groups: ['likeService']
