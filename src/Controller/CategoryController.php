@@ -21,7 +21,7 @@ class CategoryController extends AbstractFOSRestController
      * @Rest\Get("/categories", name="category_index")
      * @param CategoryRepository $categoryRepository
      * @return View
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"service"})
      */
     public function index(CategoryRepository $categoryRepository): View
     {

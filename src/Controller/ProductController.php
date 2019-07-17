@@ -21,7 +21,7 @@ class ProductController extends AbstractFOSRestController
      * @Rest\Get("/products", name="product_index")
      * @param ProductRepository $productRepository
      * @return View
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"service"})
      */
     public function index(ProductRepository $productRepository)
     {

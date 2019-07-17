@@ -42,10 +42,11 @@ class FlashSaleController extends AbstractFOSRestController
      * @param Request $request
      * @param EntityManagerInterface $entityManager
      * @param Uploader $uploader
+     * @param Publisher $publisher
      * @return View|FormInterface
      * @Rest\View(serializerGroups={"service"})
      */
-    public function new(Request $request, EntityManagerInterface $entityManager, Uploader $uploader)
+    public function new(Request $request, EntityManagerInterface $entityManager, Uploader $uploader, Publisher $publisher)
     {
         $flashSale = new FlashSale();
         $form = $this->createForm(FlashSaleType::class, $flashSale);
@@ -54,10 +55,14 @@ class FlashSaleController extends AbstractFOSRestController
         if(!$form->isValid()){
             return $form;
         }
-        $image = $uploader->uploadImage($request->files->get('image'), []);
-        $flashSale->setImage(($image));
+        $imageFile = $request->files->get('image');
+        if($imageFile){
+            $image = $uploader->uploadImage($request->files->get('image'), []);
+            $flashSale->setImage(($image));
+        }
         $entityManager->persist($flashSale);
         $entityManager->flush();
+        $publisher->publishFlashSale($flashSale);
         return View::create($flashSale, Response::HTTP_CREATED,[]);
 
     }
@@ -83,9 +88,10 @@ class FlashSaleController extends AbstractFOSRestController
      * @param Request $request
      * @param FlashSale $flashSale
      * @param EntityManagerInterface $entityManager
+     * @param Uploader $uploader
      * @return View|FormInterface
      */
-    public function edit(Request $request, FlashSale $flashSale, EntityManagerInterface $entityManager)
+    public function edit(Request $request, FlashSale $flashSale, EntityManagerInterface $entityManager, Uploader $uploader)
     {
         if (!$flashSale) {
             throw $this->createNotFoundException("Data not found.");
@@ -96,6 +102,11 @@ class FlashSaleController extends AbstractFOSRestController
 
         if (!$form->isValid()) {
             return $form;
+        }
+        $imageFile = $request->files->get('image');
+        if($imageFile){
+            $image = $uploader->uploadImage($request->files->get('image'), []);
+            $flashSale->setImage(($image));
         }
         $entityManager->persist($flashSale);
         $entityManager->flush();

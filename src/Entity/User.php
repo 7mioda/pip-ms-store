@@ -15,6 +15,11 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class User implements UserInterface, Serializable
 {
+    STATIC $USER = "USER";
+    STATIC $SELLER = "SELLER";
+    STATIC $FIRST_CONNECTED= "FIRST_CONNECTED";
+    STATIC $ACTIVE= "ACTIVE";
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -80,6 +85,22 @@ class User implements UserInterface, Serializable
      * @ORM\Column(type="string", length=255 ,nullable=true)
      */
     private $cardNumber;
+
+    /**
+     * @ORM\Column(name="coordinate_x",type="float")
+     */
+    private $coordinateX;
+
+    /**
+     * @ORM\Column(name="coordinate_y",type="float")
+     */
+    private $coordinateY;
+
+    public function __construct()
+    {
+        $this->roles[] = User::$USER;
+        $this->status = User::$FIRST_CONNECTED;
+    }
 
     public function getId(): ?int
     {
@@ -184,6 +205,43 @@ class User implements UserInterface, Serializable
     {
         $this->address = $address;
 
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCoordinateX()
+    {
+        return $this->coordinateX;
+    }
+
+    /**
+     * @param mixed $coordinateX
+     * @return User
+     */
+    public function setCoordinateX($coordinateX): User
+    {
+        $this->coordinateX = $coordinateX;
+        return $this;
+
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCoordinateY()
+    {
+        return $this->coordinateY;
+    }
+
+    /**
+     * @param mixed $coordinateY
+     * @return User
+     */
+    public function setCoordinateY($coordinateY): User
+    {
+        $this->coordinateY = $coordinateY;
         return $this;
     }
 

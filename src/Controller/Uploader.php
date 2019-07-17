@@ -19,8 +19,8 @@ class Uploader
         if(!$options){
             $options = [
                 'folder' => 'symfony-listing',
-                'width' => 200,
-                'height' => 200
+                'width' => 600,
+                'height' => 600
             ];
         }
 

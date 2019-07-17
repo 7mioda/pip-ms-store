@@ -14,3 +14,13 @@ App\Entity\Product:
       groups: ['service']
     discountEndDate:
       groups: ['service']  
+    discountBeginDate:
+      groups: ['service']
+    createdAt:
+      groups: ['service']
+    discount:
+      groups: ['service']
+    seller:
+      groups: ['service']
+    category:
+      groups: ['service']

@@ -2,6 +2,7 @@
 
 
 namespace App\Controller;
+use App\Entity\User;
 use Twig\Environment;
 use Swift_Mailer;
 use Swift_Message;
@@ -72,18 +73,17 @@ class Mailer
 
 
     /**
-     * @param array $infoUser
+     * @param User $user
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function sendFirstLoginEmailMessage(array $infoUser)
+    public function sendFirstLoginEmailMessage(User $user)
      {
          $subject = 'Bienvenue sur plantify.com !';
          $body = $this->setTemplate('Mailer/reset_password.html.twig',
-             ['firstLogin' => true, 'identifier' => $infoUser['identifier'],
-                 'link' => $infoUser['link']]);
-         $this->sendEmailMessage($infoUser['email'], $subject, $body);
+             ['identifier' => $user->getFirstName().' '.$user->getLastName()]);
+         $this->sendEmailMessage($user->getEmail(), $subject, $body);
      }
 
 

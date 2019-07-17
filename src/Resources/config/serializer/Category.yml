@@ -1,0 +1,8 @@
+App\Entity\Category:
+  properties:
+    id:
+      groups: ['service']
+    name:
+      groups: ['service']
+    description:
+      groups: ['service']
