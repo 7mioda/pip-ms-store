@@ -1,4 +1,6 @@
 App\Entity\User:
   properties:
     id:
-      groups: ['service']
+      groups: ['service', 'auth']
+    roles:
+      groups: ['auth']

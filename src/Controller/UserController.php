@@ -35,6 +35,20 @@ class UserController extends AbstractFOSRestController
         return View::create($users, Response::HTTP_OK, []);
     }
 
+    /**
+     * @Rest\Get("/sellers", name="sellers_index")
+     * @param UserRepository $userRepository
+     * @return View
+     *@Rest\View()
+     */
+    public function sellers(UserRepository $userRepository)
+    {
+        $sellers = $userRepository->findByRole(User::$SELLER);
+        if (!$sellers) {
+            throw $this->createNotFoundException("Data not found.");
+        }
+        return View::create($sellers, Response::HTTP_OK, []);
+    }
 
     /**
      * @Rest\Get("/users/reset-password-mail/{id}", name="user_reset_password_mail")
@@ -83,12 +97,12 @@ class UserController extends AbstractFOSRestController
      * @Rest\Post("/users/new", name="user_new")
      * @param Request $request
      * @param UserPasswordEncoderInterface $encoder
-     * @param JWTTokenManagerInterface $JWTManager
+     * @param EntityManagerInterface $entityManager
      * @param Publisher $publisher
      * @return View|FormInterface
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"auth"})
      */
-    public function inscription(Request $request, UserPasswordEncoderInterface $encoder, JWTTokenManagerInterface $JWTManager, Publisher $publisher)
+    public function inscription(Request $request, UserPasswordEncoderInterface $encoder,  EntityManagerInterface $entityManager, Publisher $publisher)
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -98,25 +112,41 @@ class UserController extends AbstractFOSRestController
             return $form;
         }
         $encoded = $encoder->encodePassword($user, $user->getPassword());
-        $user->setPassword($user->getPassword());
-        $entityManager = $this->getDoctrine()->getManager();
+        $user->setPassword($encoded);
         $entityManager->persist($user);
         $entityManager->flush();
         $publisher->publish('http://example.com/users', ['status' => 'user created']);
 
-        return View::create(null, Response::HTTP_CREATED, ['token' => $JWTManager->create($user)]);
+        return View::create($user, Response::HTTP_CREATED);
     }
 
     /**
      * @Rest\Post("/users/login", name="login")
      * @param Request $request
-     * @param JWTTokenManagerInterface $JWTManager
+     * @param UserRepository $userRepository
+     * @param UserPasswordEncoderInterface $encoder
+     * @param Mailer $mailer
+     * @param EntityManagerInterface $entityManager
      * @return View|FormInterface
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"auth"})
      */
-    public function login(Request $request, JWTTokenManagerInterface $JWTManager)
+    public function login(Request $request, UserRepository $userRepository, UserPasswordEncoderInterface $encoder, Mailer $mailer, EntityManagerInterface $entityManager)
     {
-        return View::create(null, Response::HTTP_CREATED, ['token' => 'ddddd']);
+        try {
+        $user = $userRepository->findOneBy(['email' => $request->get('email')]);
+            if($user && $encoder->isPasswordValid($user, $request->get('password'))){
+            if($user->getStatus() === User::$FIRST_CONNECTED){
+                $user->setStatus(User::$ACTIVE);
+                $entityManager->persist($user);
+                $entityManager->flush();
+                $mailer->sendFirstLoginEmailMessage($user);
+            }
+            return View::create($user, Response::HTTP_CREATED);
+        }
+        return View::create(null, Response::HTTP_UNAUTHORIZED);
+        } catch (Error $e) {
+            return View::create($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
