@@ -23,7 +23,7 @@ class PostController extends AbstractFOSRestController
      * @Rest\Get("/posts", name="post_index")
      * @param PostRepository $postRepository
      * @return View
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"service"})
      */
     public function index(PostRepository $postRepository): View
     {
@@ -39,7 +39,7 @@ class PostController extends AbstractFOSRestController
      * @param Request $request
      * @param Uploader $uploader
      * @return View|FormInterface
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"service"})
      */
     public function new(Request $request, Uploader $uploader)
     {

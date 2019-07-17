@@ -3,9 +3,12 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\LikeRepository")
+ * @ORM\Table(name="`like`")
  */
 class Like
 {
@@ -35,24 +38,24 @@ class Like
         return $this->id;
     }
 
-    public function getUser(): ?int
+    public function getUser()
     {
         return $this->user;
     }
 
-    public function setUser(?string $user): Like
+    public function setUser(User $user): Like
     {
         $this->user = $user;
 
         return $this;
     }
 
-    public function getPost(): ?int
+    public function getPost()
     {
         return $this->post;
     }
 
-    public function setPost(?int $post): Like
+    public function setPost(Post $post): Like
     {
         $this->post = $post;
 

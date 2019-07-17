@@ -1,0 +1,18 @@
+App\Entity\Post:
+  properties:
+    id:
+      groups: ['service', 'commentService']
+    content:
+      groups: ['service', 'commentService']
+    image:
+      groups: ['service']
+    createdAt:
+      groups: ['service']
+    updatedAt:
+      groups: ['service']
+    user:
+      groups: ['service', 'postService']
+    comments:
+      groups: ['service']
+    likes:
+      groups: ['service']

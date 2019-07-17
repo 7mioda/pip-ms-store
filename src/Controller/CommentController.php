@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Comment;
 use App\Form\CommentType;
 use App\Repository\CommentRepository;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
@@ -14,13 +15,13 @@ use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\Annotations as Rest;
 
 
-class CommentController extends AbstractController
+class CommentController extends AbstractFOSRestController
 {
     /**
      * @Rest\Get("/comments", name="comment_index")
      * @param CommentRepository $commentRepository
      * @return View
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"commentService"})
      */
     public function index(CommentRepository $commentRepository): View
     {
@@ -35,9 +36,9 @@ class CommentController extends AbstractController
      * @Rest\Post("/comments/new", name="comment_new")
      * @param Request $request
      * @return View|FormInterface
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"service"})
      */
-    public function new(Request $request): View
+    public function new(Request $request)
     {
         $comment = new Comment();
         $form = $this->createForm(CommentType::class, $comment);

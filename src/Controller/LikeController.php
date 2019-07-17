@@ -2,95 +2,115 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Like;
+use App\Form\CommentType;
 use App\Form\LikeType;
+use App\Repository\CommentRepository;
 use App\Repository\LikeRepository;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
+use FOS\RestBundle\View\View;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use FOS\RestBundle\Controller\Annotations as Rest;
 
-/**
- * @Route("/like")
- */
-class LikeController extends AbstractController
+
+class LikeController extends AbstractFOSRestController
 {
     /**
-     * @Route("/", name="like_index", methods={"GET"})
+     * @Rest\Get("/likes", name="like_index")
+     * @param LikeRepository $likeRepository
+     * @return View
+     * @Rest\View(serializerGroups={"likeService"})
      */
-    public function index(LikeRepository $likeRepository): Response
+    public function index(LikeRepository $likeRepository): View
     {
-        return $this->render('like/index.html.twig', [
-            'likes' => $likeRepository->findAll(),
-        ]);
+        $likes = $likeRepository->findAll();
+        if (!$likes) {
+            throw $this->createNotFoundException("Data not found.");
+        }
+        return View::create($likes, Response::HTTP_OK, []);
     }
 
     /**
-     * @Route("/new", name="like_new", methods={"GET","POST"})
+     * @Rest\Post("/likes/new", name="like_new")
+     * @param Request $request
+     * @return View|FormInterface
+     * @Rest\View(serializerGroups={"service"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request)
     {
         $like = new Like();
         $form = $this->createForm(LikeType::class, $like);
-        $form->handleRequest($request);
+        $form->submit($request->request->all());
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($like);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('like_index');
+        if(!$form->isValid()){
+            return $form;
         }
 
-        return $this->render('like/new.html.twig', [
-            'like' => $like,
-            'form' => $form->createView(),
-        ]);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($like);
+        $entityManager->flush();
+        return View::create($like, Response::HTTP_CREATED,[]);
     }
 
-    /**
-     * @Route("/{id}", name="like_show", methods={"GET"})
-     */
-    public function show(Like $like): Response
-    {
-        return $this->render('like/show.html.twig', [
-            'like' => $like,
-        ]);
-    }
 
     /**
-     * @Route("/{id}/edit", name="like_edit", methods={"GET","POST"})
+     * @Rest\Get("/likes/{id}", name="like_show")
+     * @param Like $like
+     * @return View
      */
-    public function edit(Request $request, Like $like): Response
+
+    public function show(Like $like): View
     {
+        if (!$like) {
+            throw $this->createNotFoundException("Data not found.");
+        }
+        return View::create($like, Response::HTTP_OK, []);
+    }
+
+
+    /**
+     * @Rest\Post("likes/edit/{id}", name="like_edit")
+     * @param Request $request
+     * @param Like $like
+     * @return View|FormInterface
+     */
+    public function edit(Request $request, Like $like): View
+    {
+        if (!$like) {
+            throw $this->createNotFoundException("Data not found.");
+        }
         $form = $this->createForm(LikeType::class, $like);
         $form->handleRequest($request);
+        $form->submit($request->request->all());
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('like_index', [
-                'id' => $like->getId(),
-            ]);
+        if (!$form->isValid()) {
+            return $form;
         }
-
-        return $this->render('like/edit.html.twig', [
-            'like' => $like,
-            'form' => $form->createView(),
-        ]);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($like);
+        $entityManager->flush();
+        return View::create($like, Response::HTTP_OK, []);
     }
 
-    /**
-     * @Route("/{id}", name="like_delete", methods={"DELETE"})
-     */
-    public function delete(Request $request, Like $like): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$like->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($like);
-            $entityManager->flush();
-        }
 
-        return $this->redirectToRoute('like_index');
+    /**
+     * @Rest\Delete("/likes/delete/{id}", name="like_delete")
+     * @param Like $like
+     * @return View
+     */
+    public function delete(Like $like): View
+    {
+        if (!$like) {
+            throw $this->createNotFoundException("Data not found.");
+        }
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($like);
+        $entityManager->flush();
+        return View::create(null,Response::HTTP_OK);
     }
 }
