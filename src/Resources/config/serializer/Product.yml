@@ -12,6 +12,8 @@ App\Entity\Product:
       groups: ['service']
     price:
       groups: ['service']
+    quantity:
+      groups: ['service']
     discountEndDate:
       groups: ['service']  
     discountBeginDate:

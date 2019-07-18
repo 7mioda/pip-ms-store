@@ -19,6 +19,17 @@ class FlashSaleRepository extends ServiceEntityRepository
         parent::__construct($registry, FlashSale::class);
     }
 
+    public function getPagination($offset, $limit)
+    {
+
+        return $this->createQueryBuilder('d')
+            ->orderBy('d.id', 'ASC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return FlashSale[] Returns an array of FlashSale objects
     //  */

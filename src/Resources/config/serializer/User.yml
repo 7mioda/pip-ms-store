@@ -2,5 +2,11 @@ App\Entity\User:
   properties:
     id:
       groups: ['service', 'auth']
+    firstName:
+      groups: ['auth']
+    lastName:
+      groups: ['auth']
+    email:
+      groups: ['auth']
     roles:
       groups: ['auth']

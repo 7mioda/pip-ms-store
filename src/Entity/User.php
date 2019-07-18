@@ -77,7 +77,12 @@ class User implements UserInterface, Serializable
     private $address;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255 ,nullable=true)
+     */
+    private $storeName;
+
+    /**
+     * @ORM\Column(type="string", length=255, options= {"default": "FIRST_CONNECTED"})
      */
     private $status;
 
@@ -87,14 +92,14 @@ class User implements UserInterface, Serializable
     private $cardNumber;
 
     /**
-     * @ORM\Column(name="coordinate_x",type="float")
+     * @ORM\Column(name="coordinate_lat",type="float")
      */
-    private $coordinateX;
+    private $coordinateLat;
 
     /**
-     * @ORM\Column(name="coordinate_y",type="float")
+     * @ORM\Column(name="coordinate_Lng",type="float")
      */
-    private $coordinateY;
+    private $coordinateLng;
 
     public function __construct()
     {
@@ -208,21 +213,33 @@ class User implements UserInterface, Serializable
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getCoordinateX()
+    public function getStoreName(): ?string
     {
-        return $this->coordinateX;
+        return $this->storeName;
+    }
+
+    public function setStoreName(?string $storeName): User
+    {
+        $this->storeName = $storeName;
+
+        return $this;
     }
 
     /**
-     * @param mixed $coordinateX
+     * @return mixed
+     */
+    public function getCoordinateLat()
+    {
+        return $this->coordinateLat;
+    }
+
+    /**
+     * @param mixed $coordinateLat
      * @return User
      */
-    public function setCoordinateX($coordinateX): User
+    public function setCoordinateLat($coordinateLat): User
     {
-        $this->coordinateX = $coordinateX;
+        $this->coordinateLat = $coordinateLat;
         return $this;
 
     }
@@ -230,18 +247,18 @@ class User implements UserInterface, Serializable
     /**
      * @return mixed
      */
-    public function getCoordinateY()
+    public function getCoordinateLng()
     {
-        return $this->coordinateY;
+        return $this->coordinateLng;
     }
 
     /**
-     * @param mixed $coordinateY
+     * @param mixed $coordinateLng
      * @return User
      */
-    public function setCoordinateY($coordinateY): User
+    public function setCoordinateLng($coordinateLng): User
     {
-        $this->coordinateY = $coordinateY;
+        $this->coordinateLng = $coordinateLng;
         return $this;
     }
 

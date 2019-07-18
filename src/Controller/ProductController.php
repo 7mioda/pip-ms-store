@@ -19,13 +19,21 @@ class ProductController extends AbstractFOSRestController
 
     /**
      * @Rest\Get("/products", name="product_index")
+     * @param Request $request
      * @param ProductRepository $productRepository
      * @return View
      * @Rest\View(serializerGroups={"service"})
      */
-    public function index(ProductRepository $productRepository)
+    public function index(Request $request, ProductRepository $productRepository)
     {
-        $products = $productRepository->findAll();
+        $offset = $request->query->get('offset');
+        $limit = $request->query->get('limit');
+        if($offset && $limit){
+            $products = $productRepository->getPagination($offset, $limit);
+        } else {
+            $products = $productRepository->findAll();
+        }
+
         if (!$products) {
             throw $this->createNotFoundException("Data not found.");
         }

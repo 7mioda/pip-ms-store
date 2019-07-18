@@ -23,13 +23,20 @@ class FlashSaleController extends AbstractFOSRestController
 
     /**
      * @Rest\Get("/flash-sales", name="flash_sale_index")
+     * @param Request $request
      * @param FlashSaleRepository $flashSaleRepository
-     * @Rest\View(serializerGroups={"service"})
      * @return View
+     * @Rest\View(serializerGroups={"service"})
      */
-    public function index(FlashSaleRepository $flashSaleRepository)
+    public function index(Request $request, FlashSaleRepository $flashSaleRepository)
     {
-        $flashSale = $flashSaleRepository->findAll();
+        $offset = $request->query->get('offset');
+        $limit = $request->query->get('limit');
+        if($offset && $limit){
+            $flashSale = $flashSaleRepository->getPagination($offset, $limit);
+        } else {
+            $flashSale = $flashSaleRepository->findAll();
+        }
         if (!$flashSale) {
             throw $this->createNotFoundException("Data not found.");
         }

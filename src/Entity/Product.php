@@ -73,6 +73,11 @@ class Product
     private $discount;
 
     /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $quantity;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\OrderLine", mappedBy="product", orphanRemoval=true)
      */
     private $orderLines;
@@ -173,7 +178,7 @@ class Product
         return $this;
     }
 
-    public function getDiscountEndDate(): ?DateTimeInterface
+    public function getDiscountEndDate()
     {
         return $this->discountEndDate;
     }
@@ -185,7 +190,7 @@ class Product
         return $this;
     }
 
-    public function getDiscountBeginDate(): ?DateTimeInterface
+    public function getDiscountBeginDate()
     {
         return $this->discountBeginDate;
     }
@@ -209,14 +214,26 @@ class Product
         return $this;
     }
 
-    public function getDiscount(): ?int
+    public function getDiscount(): ?Float
     {
         return $this->discount;
     }
 
-    public function setDiscount(?int $discount): Product
+    public function setDiscount(?Float $discount): Product
     {
         $this->discount = $discount;
+
+        return $this;
+    }
+
+    public function getQuantity(): ?Float
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(?Float $quantity): Product
+    {
+        $this->quantity = $quantity;
 
         return $this;
     }
