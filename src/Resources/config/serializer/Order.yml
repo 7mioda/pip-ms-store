@@ -1,0 +1,12 @@
+App\Entity\Order:
+  properties:
+    id:
+      groups: ['service']
+    validatedAt:
+      groups: ['service']
+    createdAt:
+      groups: ['service']
+    totalPrice:
+      groups: ['service']
+    orderLines:
+      groups: ['service']

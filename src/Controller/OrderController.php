@@ -21,7 +21,7 @@ class OrderController extends AbstractFOSRestController
      * @Rest\Get("/orders", name="order_index")
      * @param OrderRepository $orderRepository
      * @return View
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"service"})
      */
     public function index(OrderRepository $orderRepository)
     {
@@ -37,7 +37,7 @@ class OrderController extends AbstractFOSRestController
      * @Rest\Post("/orders/new", name="order_new")
      * @param Request $request
      * @return View|FormInterface
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"service"})
      */
     public function new(Request $request): View
     {

@@ -1,0 +1,10 @@
+App\Entity\OrderLine:
+  properties:
+    id:
+      groups: ['service']
+    quantity:
+      groups: ['service']
+    price:
+      groups: ['service']
+    product:
+      groups: ['service']
