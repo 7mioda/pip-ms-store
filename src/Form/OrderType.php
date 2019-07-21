@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Order;
+use App\Entity\OrderLine;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -23,6 +24,13 @@ class OrderType extends AbstractType
             ))
             ->add('totalPrice')
             ->add('note')
+            ->add('orderLines',  EntityType::class, [
+                'choice_label' => 'id',
+                'multiple' => true,
+                'by_reference' => true,
+                'expanded' => true,
+                'class'    => OrderLine::class
+            ])
             ->add('user',  EntityType::class, [
                 'choice_label' => 'id',
                 'by_reference' => true,
@@ -33,7 +41,6 @@ class OrderType extends AbstractType
                     return $qb->orderBy('d.firstName', 'ASC');
                 }
             ])
-//            ->add('delivery')
         ;
     }
 

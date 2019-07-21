@@ -47,12 +47,12 @@ class ProductController extends AbstractFOSRestController
      * @param Request $request
      * @param Uploader $uploader
      * @return View|FormInterface
-     * @Rest\View()
+     * @Rest\View("service")
      */
     public function new(Request $request, Uploader $uploader)
     {
-        $products = new Product();
-        $form = $this->createForm(ProductType::class, $products);
+        $product = new Product();
+        $form = $this->createForm(ProductType::class, $product);
         $form->submit($request->request->all());
         if(!$form->isValid()){
             return $form;
@@ -60,12 +60,12 @@ class ProductController extends AbstractFOSRestController
             $file = $request->files->get('image');
             if($file){
                 $image = $uploader->uploadImage($file, []);
-                $products->setImage($image);
+                $product->setImage($image);
             }
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($products);
+            $entityManager->persist($product);
             $entityManager->flush();
-        return View::create($products, Response::HTTP_CREATED,[]);
+        return View::create($product, Response::HTTP_CREATED,[]);
     }
 
 
@@ -111,7 +111,7 @@ class ProductController extends AbstractFOSRestController
 
 
     /**
-     * @Rest\Delete("/categories/delete/{id}", name="product_delete")
+     * @Rest\Delete("/products/delete/{id}", name="product_delete")
      * @param Request $request
      * @param Product $product
      * @return View

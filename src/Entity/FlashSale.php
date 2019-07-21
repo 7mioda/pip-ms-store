@@ -145,7 +145,7 @@ class FlashSale
         return $this;
     }
 
-    public function getProducts(): ArrayCollection
+    public function getProducts()
     {
         return $this->products;
     }

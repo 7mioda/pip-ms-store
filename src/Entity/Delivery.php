@@ -18,7 +18,7 @@ class Delivery
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, options= {"default": "PACKAGING"})
      */
     private $status;
 
@@ -35,14 +35,14 @@ class Delivery
     private $address;
 
     /**
-     * @ORM\Column(name="coordinate_x",type="float")
+     * @ORM\Column(name="coordinate_lat",type="float")
      */
-    private $coordinateX;
+    private $coordinateLat;
 
     /**
-     * @ORM\Column(name="coordinate_y",type="float")
+     * @ORM\Column(name="coordinate_lng",type="float")
      */
-    private $coordinateY;
+    private $coordinateLng;
 
     /**
      * @ORM\Column(name="created_at",type="datetime")
@@ -149,18 +149,18 @@ class Delivery
     /**
      * @return mixed
      */
-    public function getCoordinateX()
+    public function getCoordinateLat()
     {
-        return $this->coordinateX;
+        return $this->coordinateLat;
     }
 
     /**
-     * @param mixed $coordinateX
+     * @param mixed $coordinateLat
      * @return Delivery
      */
-    public function setCoordinateX($coordinateX): Delivery
+    public function setCoordinateLat($coordinateLat): Delivery
     {
-        $this->coordinateX = $coordinateX;
+        $this->coordinateLat = $coordinateLat;
         return $this;
 
     }
@@ -168,18 +168,18 @@ class Delivery
     /**
      * @return mixed
      */
-    public function getCoordinateY()
+    public function getCoordinateLng()
     {
-        return $this->coordinateY;
+        return $this->coordinateLng;
     }
 
     /**
-     * @param mixed $coordinateY
+     * @param $coordinateLng
      * @return Delivery
      */
-    public function setCoordinateY($coordinateY): Delivery
+    public function setCoordinateLng($coordinateLng): Delivery
     {
-        $this->coordinateY = $coordinateY;
+        $this->coordinateLng = $coordinateLng;
         return $this;
     }
 }
