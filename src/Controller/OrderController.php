@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Order;
 use App\Form\OrderType;
 use App\Repository\OrderRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -39,7 +40,7 @@ class OrderController extends AbstractFOSRestController
      * @return View|FormInterface
      * @Rest\View(serializerGroups={"service"})
      */
-    public function new(Request $request): View
+    public function new(Request $request, EntityManagerInterface $entityManager)
     {
         $order = new Order();
         $form = $this->createForm(OrderType::class, $order);
@@ -48,7 +49,6 @@ class OrderController extends AbstractFOSRestController
         if (!$form->isValid()) {
             return $form;
         }
-        $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($order);
         $entityManager->flush();
         return View::create($order, Response::HTTP_CREATED, []);

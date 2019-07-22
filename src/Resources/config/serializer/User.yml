@@ -4,6 +4,8 @@ App\Entity\User:
       groups: ['service', 'auth']
     firstName:
       groups: ['auth']
+    image:
+      groups: ['service']
     lastName:
       groups: ['auth']
     email:
