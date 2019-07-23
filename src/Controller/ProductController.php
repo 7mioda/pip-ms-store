@@ -9,6 +9,7 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -88,9 +89,10 @@ class ProductController extends AbstractFOSRestController
      * @Rest\Post("products/edit/{id}", name="product_edit")
      * @param Request $request
      * @param Product $product
+     * @param Uploader $uploader
      * @return View|FormInterface
      */
-    public function edit(Request $request, Product $product)
+    public function edit(Request $request, Product $product, Uploader $uploader)
     {
         if (!$product) {
             throw $this->createNotFoundException("Data not found.");
@@ -102,6 +104,11 @@ class ProductController extends AbstractFOSRestController
         if (!$form->isValid()) {
             return $form;
          }
+        $imageFile = $request->files->get('image');
+        if($imageFile instanceof UploadedFile){
+            $image = $uploader->uploadImage($imageFile, []);
+            $product->setImage(($image));
+        }
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($product);
         $entityManager->flush();

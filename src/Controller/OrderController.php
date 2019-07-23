@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Order;
 use App\Form\OrderType;
 use App\Repository\OrderRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
@@ -97,6 +98,24 @@ class OrderController extends AbstractFOSRestController
 
     }
 
+    /**
+     * @Rest\Get("order/validate-order/{id}", name="order_payment")
+     * @param Order $order
+     * @param EntityManagerInterface $entityManager
+     * @return View|FormInterface
+     * @throws \Exception
+     */
+    public function validateOrder(Order $order, EntityManagerInterface $entityManager)
+    {
+        if (!$order) {
+            throw $this->createNotFoundException("Data not found.");
+        }
+        $order->setValidatedAt(new DateTime());
+        $entityManager->persist($order);
+        $entityManager->flush();
+        return View::create($order, Response::HTTP_OK, []);
+
+    }
 
     /**
      * @Rest\Post("order/edit/{id}", name="order_edit")
