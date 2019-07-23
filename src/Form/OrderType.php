@@ -7,7 +7,9 @@ use App\Entity\OrderLine;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -16,20 +18,16 @@ class OrderType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('totalPrice', NumberType::class)
             ->add('createdAt', DateTimeType::class, array(
                 'widget' => 'single_text',
             ))
-            ->add('validatedAt', DateTimeType::class, array(
-                'widget' => 'single_text',
-            ))
-            ->add('totalPrice')
             ->add('note')
-            ->add('orderLines',  EntityType::class, [
-                'choice_label' => 'id',
-                'multiple' => true,
+            ->add('orderLines',  CollectionType::class, [
+                'entry_type' => OrderLineType::class,
+                'allow_add' => true,
                 'by_reference' => true,
-                'expanded' => true,
-                'class'    => OrderLine::class
+                'allow_delete' => true
             ])
             ->add('user',  EntityType::class, [
                 'choice_label' => 'id',

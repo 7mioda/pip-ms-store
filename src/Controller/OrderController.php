@@ -12,6 +12,7 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Flosch\Bundle\StripeBundle\Stripe\StripeClient as BaseStripeClient;
 
 
 
@@ -26,17 +27,18 @@ class OrderController extends AbstractFOSRestController
      */
     public function index(OrderRepository $orderRepository)
     {
-        $order = $orderRepository->findAll();
-        if (!$order) {
+        $orders = $orderRepository->findAll();
+        if (!$orders) {
             throw $this->createNotFoundException("Data not found.");
         }
-        return View::create($order, Response::HTTP_OK, []);
+        return View::create($orders, Response::HTTP_OK, []);
     }
 
 
     /**
      * @Rest\Post("/orders/new", name="order_new")
      * @param Request $request
+     * @param EntityManagerInterface $entityManager
      * @return View|FormInterface
      * @Rest\View(serializerGroups={"service"})
      */
@@ -49,11 +51,18 @@ class OrderController extends AbstractFOSRestController
         if (!$form->isValid()) {
             return $form;
         }
+        //$order->setTotalPrice(1000);
         $entityManager->persist($order);
+        foreach ($form->get('orderLines')->getData() as $orderLine)
+        {
+            $orderLine->setOrder($order);
+        }
         $entityManager->flush();
         return View::create($order, Response::HTTP_CREATED, []);
 
     }
+
+
 
     /**
      * @Rest\Get("/order/{id}", name="order_show")
@@ -65,6 +74,25 @@ class OrderController extends AbstractFOSRestController
         if (!$order) {
             throw $this->createNotFoundException("Data not found.");
         }
+        return View::create($order, Response::HTTP_OK, []);
+
+    }
+
+    /**
+     * @Rest\Get("order/submit-payment/{id}", name="order_payment")
+     * @param Request $request
+     * @param Order $order
+     * @param BaseStripeClient $stripeClient
+     * @return View|FormInterface
+     */
+    public function submitPayment(Request $request, Order $order, BaseStripeClient $stripeClient)
+    {
+        if (!$order) {
+            throw $this->createNotFoundException("Data not found.");
+        }
+        $paymentToken  = $request->query->get('payment-token');
+//        $total = $order->getTotalPrice() || 100;
+        $stripeClient->createCharge(100, "eur", $paymentToken , null, 0, 'test');
         return View::create($order, Response::HTTP_OK, []);
 
     }

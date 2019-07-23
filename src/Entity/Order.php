@@ -41,7 +41,7 @@ class Order
 
 
     /**
-     * @ORM\OneToMany(targetEntity="OrderLine", mappedBy="order", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="OrderLine", mappedBy="order", cascade={"remove", "persist"})
      */
     private $orderLines;
 

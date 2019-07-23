@@ -3,31 +3,28 @@ namespace App\Controller;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Error\Error;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 
 class TestController extends FOSRestController {
     /**
      *
      * @Rest\Get("/test")
-     * @param Mailer $mailer
-     * @return View
+     * @param Pdfer $pdfer
+     * @return void
      */
-    public function testAction(Mailer $mailer): View
+    public function testAction(Pdfer $pdfer)
     {
-        $stripeClient = $this->get('flosch.stripe.client');
         try {
-            $mailer->sendResettingEmailMessage(
-                [
-                    'username' => 'username',
-                    'confirmationLink' => 'confirmationLink',
-                    'email' => 'ahmededaly1993@gmail.com'
-                ]
-            );
-        } catch (Error $e) {
-            return View::create($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            $pdfer->generatePdf([]);
+        } catch (LoaderError $e) {
+        } catch (RuntimeError $e) {
+        } catch (SyntaxError $e) {
         }
-        return View::create(['test' => 'OK', 'stripe' => $stripeClient]);
     }
 }

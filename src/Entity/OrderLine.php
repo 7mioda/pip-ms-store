@@ -29,8 +29,8 @@ class OrderLine
 
     /**
      * Many OrderLines have one order. This is the owning side.
-     * @ORM\ManyToOne(targetEntity="App\Entity\Order", inversedBy="orderLines")
-//     * @ORM\JoinColumn(name="order", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Order", inversedBy="orderLines", cascade={"persist"})
+     * @ORM\JoinColumn(name="`order`", referencedColumnName="id")
      */
     private $order;
 
@@ -73,7 +73,7 @@ class OrderLine
     /**
      * @return Product
      */
-    public function getProduct(): Product
+    public function getProduct()
     {
         return $this->product;
     }

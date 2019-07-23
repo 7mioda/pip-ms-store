@@ -38,13 +38,13 @@ class Post
 
     /**
      * Many likes can be affected to one Post
-     * @ORM\OneToMany(targetEntity="App\Entity\Like", mappedBy="post" )
+     * @ORM\OneToMany(targetEntity="App\Entity\Like", mappedBy="post", cascade={"remove"} )
      */
     private $likes;
 
     /**
      * Many Comments can be affected to one Post
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="post")
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="post", cascade={"remove"})
      */
     private $comments;
 

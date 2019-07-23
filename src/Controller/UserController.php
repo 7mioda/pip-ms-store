@@ -51,21 +51,25 @@ class UserController extends AbstractFOSRestController
     }
 
     /**
-     * @Rest\Get("/users/reset-password-mail/{id}", name="user_reset_password_mail")
-     * @param User $user
+     * @Rest\Get("/users/reset-password-mail", name="user_reset_password_mail")
+     * @param Request $request
      * @param Mailer $mailer
+     * @param UserRepository $userRepository
      * @return View
      * @Rest\View()
      */
-    public function resetPasswordMail(User $user, Mailer $mailer)
+    public function resetPasswordMail(Request $request, Mailer $mailer, UserRepository $userRepository)
     {
+        $userEmail = $request->query->get('email');
+        $user = $userRepository->findOneBy(['email' => $userEmail]);
         $token = rand (1000000,9999999);
         try {
             $mailer->sendResettingEmailMessage(
                 [
                     'username' => $user->getFirstName() . ' ' . $user->getLastName(),
-                    'confirmationLink' => 'http://localhost:8000/api/users/reset-password/'.$user->getId().'?token='.$token,
-                    'email' => $user->getEmail()
+                    'confirmationLink' => 'http://localhost:8000/api/users/reset-password?email='.$user->getEmail().'&token='.$token,
+                    'email' => $user->getEmail(),
+                    'newPassword' => $token
                 ]
             );
         } catch (Error $e) {
@@ -75,18 +79,22 @@ class UserController extends AbstractFOSRestController
     }
 
     /**
-     * @Rest\Get("/users/reset-password/{id}", name="user_reset_password")
+     * @Rest\Get("/users/reset-password", name="user_reset_password")
      * @param Request $request
-     * @param User $user
+     * @param UserRepository $userRepository
      * @param EntityManagerInterface $entityManager
+     * @param UserPasswordEncoderInterface $encoder
      * @return View
      * @Rest\View()
      */
-    public function resetPassword(Request $request, User $user, EntityManagerInterface $entityManager)
+    public function resetPassword(Request $request, UserRepository $userRepository, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $encoder)
     {
         $token = $request->query->get('token');
+        $userEmail = $request->query->get('email');
+        $user = $userRepository->findOneBy(['email' => $userEmail]);
         if ($token){
-           $user->setPassword($token);
+           $encoded = $encoder->encodePassword($user, $token);
+           $user->setPassword($encoded);
         }
         $entityManager->persist($user);
         $entityManager->flush();
@@ -113,6 +121,7 @@ class UserController extends AbstractFOSRestController
         }
         $encoded = $encoder->encodePassword($user, $user->getPassword());
         $user->setPassword($encoded);
+        $user->setStatus(User::$FIRST_CONNECTED);
         $entityManager->persist($user);
         $entityManager->flush();
         $publisher->publish('http://example.com/users', ['status' => 'user created']);

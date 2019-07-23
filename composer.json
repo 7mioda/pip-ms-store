@@ -7,6 +7,7 @@
         "ext-iconv": "*",
         "ext-json": "*",
         "cloudinary/cloudinary_php": "^1.14",
+        "dompdf/dompdf": "^0.8.3",
         "flosch/stripe-bundle": "^2.1",
         "friendsofsymfony/rest-bundle": "^2.5",
         "jms/serializer-bundle": "^3.3",

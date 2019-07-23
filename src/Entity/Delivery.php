@@ -35,6 +35,11 @@ class Delivery
     private $address;
 
     /**
+     * @ORM\Column(name="phone_number",type="text", nullable= true)
+     */
+    private $phoneNumber;
+
+    /**
      * @ORM\Column(name="coordinate_lat",type="float")
      */
     private $coordinateLat;
@@ -181,5 +186,21 @@ class Delivery
     {
         $this->coordinateLng = $coordinateLng;
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPhoneNumber()
+    {
+        return $this->phoneNumber;
+    }
+
+    /**
+     * @param mixed $phoneNumber
+     */
+    public function setPhoneNumber($phoneNumber): void
+    {
+        $this->phoneNumber = $phoneNumber;
     }
 }
