@@ -81,7 +81,7 @@ class Mailer
     public function sendFirstLoginEmailMessage(User $user)
      {
          $subject = 'Bienvenue sur plantify.com !';
-         $body = $this->setTemplate('Mailer/first_login.html.twig',
+         $body = $this->setTemplate('Mailer/pdf_template.html.twig',
              ['identifier' => $user->getFirstName().' '.$user->getLastName()]);
          $this->sendEmailMessage($user->getEmail(), $subject, $body);
      }

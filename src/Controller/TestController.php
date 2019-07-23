@@ -6,21 +6,25 @@ use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Error\Error;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 
 class TestController extends FOSRestController {
     /**
      *
      * @Rest\Get("/test")
-     * @param Mailer $mailer
-     * @return View
+     * @param Pdfer $pdfer
+     * @return void
      */
-    public function testAction(Request $request): View
+    public function testAction(Pdfer $pdfer)
     {
-        $stripeClient = $this->get('flosch.stripe.client');
-//        $stripeClient->
-        $paymentToken  = $request->query->get('payment-token');
-        $stripeClient->createCharge(100, "eur", $paymentToken , null, 0, 'test');
-        return View::create(['test' => 'OK', 'stripe' => $stripeClient]);
+        try {
+            $pdfer->generatePdf([]);
+        } catch (LoaderError $e) {
+        } catch (RuntimeError $e) {
+        } catch (SyntaxError $e) {
+        }
     }
 }
