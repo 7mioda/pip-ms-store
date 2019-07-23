@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Order;
 use App\Entity\OrderLine;
 use App\Entity\Product;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -27,6 +28,13 @@ class OrderLineType extends AbstractType
                     return $qb->orderBy('d.name', 'ASC');
                 }
             ])
+            ->add('order',  EntityType::class, [
+                'choice_label' => 'id',
+                'by_reference' => true,
+                'multiple' => false,
+                'expanded' => true,
+                'class'    => Order::class,
+            ])
         ;
     }
 
@@ -34,6 +42,8 @@ class OrderLineType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => OrderLine::class,
+            'csrf_protection' => false,
+            'validation_groups' => false,
         ]);
     }
 }

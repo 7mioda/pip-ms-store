@@ -13,6 +13,7 @@ use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as Rest;
 
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -63,8 +64,8 @@ class FlashSaleController extends AbstractFOSRestController
             return $form;
         }
         $imageFile = $request->files->get('image');
-        if($imageFile){
-            $image = $uploader->uploadImage($request->files->get('image'), []);
+        if($imageFile instanceof UploadedFile){
+            $image = $uploader->uploadImage($imageFile, []);
             $flashSale->setImage(($image));
         }
         $entityManager->persist($flashSale);
@@ -111,8 +112,8 @@ class FlashSaleController extends AbstractFOSRestController
             return $form;
         }
         $imageFile = $request->files->get('image');
-        if($imageFile){
-            $image = $uploader->uploadImage($request->files->get('image'), []);
+        if($imageFile instanceof UploadedFile){
+            $image = $uploader->uploadImage($imageFile, []);
             $flashSale->setImage(($image));
         }
         $entityManager->persist($flashSale);

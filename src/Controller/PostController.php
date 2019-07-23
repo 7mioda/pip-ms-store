@@ -63,6 +63,7 @@ class PostController extends AbstractFOSRestController
     /**
      * @Rest\Get("/posts/{id}", name="post_show")
      * @param Post $post
+     * @Rest\View(serializerGroups={"service"})
      * @return View
      */
     public function show(Post $post): View

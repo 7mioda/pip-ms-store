@@ -21,8 +21,8 @@ class UserType extends AbstractType
             ->add('roles')
             ->add('address')
             ->add('status')
-            ->add('coordinateX')
-            ->add('coordinateY')
+            ->add('coordinateLat')
+            ->add('coordinateLng')
             //->add('cardNumber')
         ;
     }

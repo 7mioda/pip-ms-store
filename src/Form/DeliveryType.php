@@ -20,6 +20,7 @@ class DeliveryType extends AbstractType
             ->add('status', TextType::class ,[
                 'data' => 'packaging'
             ])
+            ->add('phoneNumber')
             ->add('address')
             ->add('coordinateLat')
             ->add('coordinateLng')
